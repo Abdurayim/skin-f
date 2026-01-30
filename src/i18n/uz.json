@@ -1,0 +1,408 @@
+{
+  "common": {
+    "loading": "Yuklanmoqda...",
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "edit": "Tahrirlash",
+    "delete": "O'chirish",
+    "confirm": "Tasdiqlash",
+    "back": "Orqaga",
+    "continue": "Davom etish",
+    "viewAll": "Hammasini ko'rish",
+    "loadMore": "Ko'proq yuklash",
+    "user": "Foydalanuvchi",
+    "all": "Hammasi",
+    "previous": "Oldingi",
+    "next": "Keyingi",
+    "page": "Sahifa",
+    "backToHome": "Bosh sahifaga",
+    "view": "Ko'rish",
+    "secure": "Xavfsiz",
+    "fast": "Tez",
+    "verified": "Tasdiqlangan"
+  },
+  "nav": {
+    "browse": "E'lonlar",
+    "sell": "Sotish",
+    "messages": "Xabarlar",
+    "profile": "Profil",
+    "myPosts": "E'lonlarim",
+    "verification": "Tekshiruv",
+    "login": "Kirish",
+    "logout": "Chiqish"
+  },
+  "auth": {
+    "login": "Kirish",
+    "loginDesc": "Davom etish uchun telefon raqamingizni kiriting",
+    "phoneNumber": "Telefon raqami",
+    "sendCode": "Kod yuborish",
+    "verifyCode": "Kodni tasdiqlash",
+    "verifyDesc": "Telefoningizga yuborilgan 6 xonali kodni kiriting",
+    "codeSentTo": "Kod yuborildi",
+    "verify": "Tasdiqlash",
+    "resendCode": "Qayta yuborish",
+    "resendIn": "Qayta yuborish",
+    "changePhone": "Raqamni o'zgartirish",
+    "termsAgree": "Davom etish orqali siz Foydalanish shartlari va Maxfiylik siyosatiga rozilik bildirasiz"
+  },
+  "home": {
+    "hero": {
+      "title": "O'yin skinlarini xavfsiz sotib oling va soting",
+      "subtitle": "O'yin skinlari, akkauntlar va buyumlar uchun ishonchli bozor.",
+      "browseCta": "E'lonlarni ko'rish",
+      "sellCta": "Sotishni boshlash",
+      "slide1": {
+        "title": "O'yin skinlarini ayirboshlang",
+        "subtitle": "Eng yaxshi o'yinlardan noyob skinlarni sotib oling va soting",
+        "cta": "Hozir ko'ring"
+      },
+      "slide2": {
+        "title": "Tasdiqlangan sotuvchilar",
+        "subtitle": "Barcha treyderlar xavfsiz bitimlar uchun KYC tekshiruvidan o'tgan",
+        "cta": "Savdoni boshlash"
+      },
+      "slide3": {
+        "title": "Eng yaxshi narxlar",
+        "subtitle": "O'yin buyumlariga eng yaxshi takliflarni toping",
+        "cta": "Takliflarni ko'rish"
+      },
+      "slide4": {
+        "title": "Rust Savdosi",
+        "subtitle": "Rust buyumlari, qurollari va resurslarini ayirboshlang"
+      },
+      "slide5": {
+        "title": "Team Fortress 2",
+        "subtitle": "TF2 shlyaplari, qurollari va noyob buyumlarini sotib oling"
+      },
+      "slide6": {
+        "title": "GTA V Online",
+        "subtitle": "Premium GTA V akkauntlari va o'yin valyutasi savdosi"
+      },
+      "slide7": {
+        "title": "ARK Savdosi",
+        "subtitle": "ARK akkauntlari, jonzotlar va qimmatli resurslarni ayirboshlang"
+      },
+      "tradeNow": "Hozir Savdo Qiling",
+      "startSelling": "Sotishni boshlash",
+      "stats": {
+        "skins": "Skinlar va Buyumlar",
+        "currency": "O'yin Valyutasi",
+        "boosting": "Akkaunt Busting"
+      }
+    },
+    "games": {
+      "title": "Mashhur o'yinlar",
+      "subtitle": "Sevimli o'yinlaringizdan skinlarni toping"
+    },
+    "featured": {
+      "title": "Tanlangan e'lonlar",
+      "subtitle": "Siz uchun qo'lda tanlangan takliflar"
+    },
+    "features": {
+      "secure": {
+        "title": "Xavfsiz savdo",
+        "description": "Barcha sotuvchilar xavfsiz tranzaksiyalar uchun tekshiruvdan o'tgan."
+      },
+      "fast": {
+        "title": "Tez va oson",
+        "description": "E'lonni bir necha daqiqada joylashtiring va xaridorlarni toping."
+      },
+      "community": {
+        "title": "Ishonchli jamiyat",
+        "description": "Minglab treyderlar jamoasiga qo'shiling."
+      }
+    },
+    "stats": {
+      "activeListings": "Faol e'lonlar",
+      "verifiedSellers": "Tasdiqlangan sotuvchilar",
+      "successfulTrades": "Muvaffaqiyatli bitimlar"
+    },
+    "whyChoose": {
+      "title": "Nima uchun",
+      "subtitle": "Xavfsiz tranzaksiyalar bilan o'yin buyumlari uchun eng ishonchli bozor"
+    },
+    "cta": {
+      "title": "Tayyor",
+      "trading": "savdoga",
+      "subtitle": "Minglab treyderlarga qo'shiling va bugun o'yin buyumlariga eng yaxshi takliflarni toping.",
+      "browse": "E'lonlarni ko'rish",
+      "create": "Hisob yaratish"
+    },
+    "services": {
+      "title": "Xizmatlarimiz",
+      "subtitle": "O'yin tajribangiz uchun hamma narsa",
+      "skins": {
+        "title": "O'yin skinlari",
+        "description": "CS2, Dota 2 va boshqa mashhur o'yinlardan noyob skinlarni sotib oling va soting"
+      },
+      "currency": {
+        "title": "O'yin valyutasi",
+        "description": "Oltin, kreditlar, tangalar va boshqa o'yin valyutalarini eng yaxshi narxlarda oling"
+      },
+      "boosting": {
+        "title": "Akkaunt bustingi",
+        "description": "Professional busting xizmatlari bilan darajangizni oshiring"
+      },
+      "accounts": {
+        "title": "O'yin akkountlari",
+        "description": "Noyob buyumlar va yuqori reytingli tasdiqlangan akkountlarni sotib oling"
+      }
+    }
+  },
+  "posts": {
+    "title": "Barcha e'lonlar",
+    "subtitle": "O'zingizga kerakli o'yin buyumlarini toping",
+    "noPostsFound": "E'lonlar topilmadi",
+    "tryDifferentFilters": "Filtrlarni o'zgartirib ko'ring",
+    "createFirst": "Boshlash uchun birinchi e'loningizni yarating",
+    "notFound": "E'lon topilmadi",
+    "backToList": "Ro'yxatga qaytish",
+    "seenAll": "Barcha e'lonlarni ko'rdingiz",
+    "browseListings": "E'lonlarni ko'rish"
+  },
+  "post": {
+    "title": "Sarlavha",
+    "titlePlaceholder": "Tavsifiy sarlavha kiriting",
+    "description": "Tavsif",
+    "descriptionPlaceholder": "Buyumingizni batafsil tasvirlab bering...",
+    "game": "O'yin",
+    "type": "Tur",
+    "price": "Narx",
+    "currency": "Valyuta",
+    "images": "Rasmlar",
+    "create": "E'lon yaratish",
+    "createTitle": "Yangi e'lon",
+    "createDesc": "Buyumni sotish uchun ma'lumotlarni to'ldiring",
+    "editTitle": "E'lonni tahrirlash",
+    "seller": "Sotuvchi",
+    "contactSeller": "Sotuvchi bilan bog'lanish",
+    "postedOn": "E'lon qilingan",
+    "noDescription": "Tavsif yo'q",
+    "confirmDelete": "Bu e'lonni o'chirishni xohlaysizmi?",
+    "kycRequired": "Tekshiruv talab qilinadi",
+    "kycRequiredDesc": "E'lon yaratish uchun shaxsingizni tasdiqlashingiz kerak.",
+    "goToKyc": "Tekshiruvni o'tish",
+    "whyKyc": "Nima uchun KYC?",
+    "kycBenefit1": "Xaridorlarni firibgarlardan himoya qiladi",
+    "kycBenefit2": "Bozorda ishonchni mustahkamlaydi",
+    "kycBenefit3": "Shaxsingiz maxfiy qoladi",
+    "tips": {
+      "title": "Yaxshi e'lon uchun maslahatlar",
+      "tip1": "Aniq, sifatli skrinshotlardan foydalaning",
+      "tip2": "Nimalar kiritilganini aniq ko'rsating",
+      "tip3": "Raqobatbardosh narx belgilang",
+      "tip4": "Xabarlarga tez javob bering"
+    },
+    "types": {
+      "skin": "Skin",
+      "account": "Akkaunt",
+      "item": "Buyum",
+      "currency": "O'yin valyutasi",
+      "boosting": "Busting"
+    },
+    "status": {
+      "active": "Faol",
+      "sold": "Sotildi",
+      "draft": "Qoralama",
+      "removed": "O'chirilgan"
+    },
+    "views": "ko'rishlar",
+    "myListings": "E'lonlarim"
+  },
+  "filters": {
+    "title": "Filtrlar",
+    "search": "Qidirish",
+    "searchPlaceholder": "E'lonlarni qidirish...",
+    "game": "O'yin",
+    "type": "Tur",
+    "minPrice": "Min narx",
+    "maxPrice": "Maks narx",
+    "priceRange": "Narx oralig'i",
+    "sortBy": "Saralash",
+    "reset": "Tozalash",
+    "newest": "Eng yangi",
+    "oldest": "Eng eski",
+    "priceAsc": "Narx: past → yuqori",
+    "priceDesc": "Narx: yuqori → past"
+  },
+  "profile": {
+    "title": "Profil ma'lumotlari",
+    "name": "Ism",
+    "fullName": "To'liq ism",
+    "email": "Email",
+    "emailHint": "Ixtiyoriy - akkauntni tiklash uchun",
+    "phone": "Telefon raqami",
+    "location": "Joylashuv",
+    "bio": "O'zingiz haqingizda",
+    "bioPlaceholder": "O'zingiz haqingizda ayting...",
+    "bioHint": "Boshqalarga o'zingiz haqingizda ayting",
+    "edit": "Profilni tahrirlash",
+    "memberSince": "A'zo bo'lgan",
+    "posts": "E'lonlar",
+    "listings": "E'lonlar",
+    "sales": "Sotuvlar",
+    "sold": "Sotilgan",
+    "rating": "Reyting",
+    "welcome": "Xush kelibsiz!",
+    "completeProfile": "Boshlash uchun profilingizni to'ldiring.",
+    "updateSuccess": "Profil muvaffaqiyatli yangilandi",
+    "quickActions": "Tezkor harakatlar",
+    "statistics": "Statistika",
+    "verifiedSeller": "Tasdiqlangan sotuvchi",
+    "unverified": "Tasdiqlanmagan",
+    "identityVerified": "Shaxs tasdiqlangan",
+    "verifyIdentity": "Shaxsingizni tasdiqlang",
+    "verifiedDesc": "Akkauntingiz tasdiqlangan. Siz e'lonlar yaratishingiz va xavfsiz savdo qilishingiz mumkin.",
+    "unverifiedDesc": "Bozorda sotishni boshlash uchun KYC tekshiruvidan o'ting.",
+    "startVerification": "Tekshiruvni boshlash"
+  },
+  "kyc": {
+    "title": "Shaxsni tasdiqlash",
+    "subtitle": "SkinTrader'da sotishni boshlash uchun tekshiruvni o'ting",
+    "documentTitle": "Hujjat",
+    "documentDesc": "Pasport yoki ID kartangizning aniq rasmini yuklang",
+    "selfieTitle": "Selfi",
+    "selfieDesc": "Hujjatingiz bilan selfi oling",
+    "clickToUpload": "Yuklash uchun bosing",
+    "takeOrUploadSelfie": "Selfi oling yoki yuklang",
+    "maxFileSize": "Maks hajm: 10MB",
+    "submit": "Tekshiruvga yuborish",
+    "startSelling": "Sotishni boshlash",
+    "notSubmitted": "Tasdiqlanmagan",
+    "notSubmittedDesc": "Sotishni boshlash uchun shaxsingizni tasdiqlang",
+    "pending": "Tekshiruvda",
+    "pendingDesc": "Hujjatlaringiz tekshirilmoqda. Odatda 1-2 ish kuni davom etadi.",
+    "approved": "Tasdiqlangan",
+    "approvedDesc": "Shaxsingiz tasdiqlandi. Endi e'lonlar yaratishingiz mumkin.",
+    "rejected": "Rad etildi",
+    "rejectedDesc": "Tekshiruv rad etildi. Iltimos, haqiqiy hujjatlar bilan qayta urinib ko'ring.",
+    "youreVerified": "Siz tasdiqlangansiz!",
+    "verifiedMessage": "Shaxsingiz tasdiqlandi. Endi e'lonlar yaratishingiz va bozorda savdo qilishingiz mumkin.",
+    "verificationInProgress": "Tekshiruv jarayonida",
+    "reviewingDocs": "Hujjatlaringizni tekshirmoqdamiz. Odatda 24-48 soat davom etadi.",
+    "statusPending": "Holat: Tekshiruvda",
+    "submittedRecently": "Yaqinda yuborilgan",
+    "browseWhileWait": "Kutayotganda e'lonlarni ko'ring",
+    "uploadDocument": "Hujjatni yuklang",
+    "uploadDocumentDesc": "Pasport, haydovchilik guvohnomasi yoki milliy ID kartangizning aniq rasmini yuklang.",
+    "takeSelfie": "Selfi oling",
+    "takeSelfieDesc": "Shaxsingiz hujjatga mos kelishini tasdiqlash uchun aniq selfi oling.",
+    "requirements": "Talablar",
+    "req1": "Hujjat amal qiluvchi va muddati o'tmagan bo'lishi kerak",
+    "req2": "Barcha matn aniq o'qilishi kerak",
+    "req3": "Rasmda yorqinlik yoki soya bo'lmasligi kerak",
+    "selfieTips": "Yaxshi selfi uchun maslahatlar",
+    "selfieTip1": "Kameraga to'g'ri qarang",
+    "selfieTip2": "Yaxshi yorug'lik, yuzda soya bo'lmasin",
+    "selfieTip3": "Ko'zoynak va bosh kiyimni olib tashlang",
+    "securityNote": "Hujjatlaringiz shifrlangan va xavfsiz saqlanadi. Biz ularni faqat shaxsingizni tasdiqlash uchun ishlatamiz va hech qachon uchinchi tomonlarga bermaymiz.",
+    "status": {
+      "none": "Tasdiqlanmagan",
+      "pending": "Tekshiruvda",
+      "approved": "Tasdiqlangan",
+      "rejected": "Rad etildi"
+    },
+    "step": {
+      "document": "Hujjat",
+      "selfie": "Selfi"
+    }
+  },
+  "messages": {
+    "title": "Xabarlar",
+    "noConversations": "Suhbatlar yo'q",
+    "noMessages": "Xabarlar yo'q",
+    "selectConversation": "Suhbatni tanlang",
+    "startConversation": "Suhbatni boshlash uchun xabar yuboring",
+    "typePlaceholder": "Xabar yozing...",
+    "loading": "Xabarlar yuklanmoqda...",
+    "loadingConversations": "Suhbatlar yuklanmoqda...",
+    "emptyTitle": "Hali xabarlar yo'q",
+    "emptyDesc": "Sotuvchi bilan e'lon sahifasidan bog'lanish orqali suhbatni boshlang.",
+    "chooseConversation": "Xabar yozish uchun ro'yxatdan suhbatni tanlang."
+  },
+  "admin": {
+    "login": "Admin kirish",
+    "username": "Foydalanuvchi nomi",
+    "password": "Parol",
+    "dashboard": "Boshqaruv paneli",
+    "users": "Foydalanuvchilar",
+    "kycReview": "KYC tekshiruvi",
+    "posts": "E'lonlar",
+    "totalUsers": "Jami foydalanuvchilar",
+    "totalPosts": "Jami e'lonlar",
+    "pendingKyc": "Kutilayotgan KYC",
+    "activePosts": "Faol e'lonlar",
+    "recentUsers": "Yangi foydalanuvchilar",
+    "recentPosts": "Yangi e'lonlar",
+    "noRecentUsers": "Yangi foydalanuvchilar yo'q",
+    "noRecentPosts": "Yangi e'lonlar yo'q",
+    "user": "Foydalanuvchi",
+    "phone": "Telefon",
+    "kycStatus": "KYC holati",
+    "joined": "Qo'shilgan",
+    "noUsers": "Foydalanuvchilar topilmadi",
+    "noPendingKyc": "Kutilayotgan KYC so'rovlari yo'q",
+    "submittedOn": "Yuborilgan",
+    "review": "Ko'rib chiqish",
+    "approve": "Tasdiqlash",
+    "reject": "Rad etish",
+    "rejectionReason": "Rad etish sababi",
+    "rejectionReasonPlaceholder": "Rad etish sababini kiriting...",
+    "seller": "Sotuvchi",
+    "type": "Tur",
+    "price": "Narx",
+    "status": "Holat",
+    "date": "Sana",
+    "noPosts": "E'lonlar topilmadi",
+    "postActions": "Harakatlar",
+    "removePost": "E'lonni o'chirish",
+    "restorePost": "E'lonni tiklash",
+    "viewAll": "Hammasini ko'rish",
+    "welcomeBack": "Xush kelibsiz! Mana sizning umumiy ko'rinishingiz.",
+    "backToSite": "Saytga qaytish",
+    "loadingDashboard": "Boshqaruv paneli yuklanmoqda..."
+  },
+  "footer": {
+    "description": "O'yin skinlari, akkauntlar va buyumlarni sotib olish va sotish uchun ishonchli bozor.",
+    "quickLinks": "Tezkor havolalar",
+    "support": "Yordam",
+    "help": "Yordam markazi",
+    "terms": "Foydalanish shartlari",
+    "privacy": "Maxfiylik siyosati",
+    "rights": "Barcha huquqlar himoyalangan.",
+    "systemStatus": "Barcha tizimlar ishlayapti",
+    "social": {
+      "telegram": "Telegram",
+      "discord": "Discord",
+      "twitter": "Twitter"
+    }
+  },
+  "errors": {
+    "pageNotFound": "Sahifa topilmadi",
+    "pageNotFoundDesc": "Siz qidirayotgan sahifa mavjud emas yoki ko'chirilgan.",
+    "loginFailed": "Kirish xatosi. Ma'lumotlarni tekshiring.",
+    "networkError": "Tarmoq xatosi. Qayta urinib ko'ring.",
+    "listingNotFound": "Siz qidirayotgan e'lon mavjud emas yoki o'chirilgan."
+  },
+  "validation": {
+    "required": "Bu maydon talab qilinadi",
+    "invalidEmail": "Noto'g'ri email manzil",
+    "invalidPhone": "Noto'g'ri telefon raqami"
+  },
+  "card": {
+    "viewDetails": "Batafsil ko'rish"
+  },
+  "modal": {
+    "deleteTitle": "E'lonni o'chirish",
+    "deleteConfirm": "Ishonchingiz komilmi?",
+    "deleteWarning": "Bu amalni qaytarib bo'lmaydi. E'lon butunlay o'chiriladi."
+  },
+  "stats": {
+    "active": "Faol",
+    "sold": "Sotilgan",
+    "drafts": "Qoralamalar"
+  },
+  "manage": {
+    "title": "E'lonlaringizni boshqaring"
+  }
+}

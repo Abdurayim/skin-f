@@ -1,0 +1,408 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "continue": "Continue",
+    "viewAll": "View All",
+    "loadMore": "Load More",
+    "user": "User",
+    "all": "All",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "backToHome": "Back to Home",
+    "view": "View",
+    "secure": "Secure",
+    "fast": "Fast",
+    "verified": "Verified"
+  },
+  "nav": {
+    "browse": "Browse",
+    "sell": "Sell",
+    "messages": "Messages",
+    "profile": "Profile",
+    "myPosts": "My Posts",
+    "verification": "Verification",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "loginDesc": "Enter your phone number to continue",
+    "phoneNumber": "Phone Number",
+    "sendCode": "Send Code",
+    "verifyCode": "Verify Code",
+    "verifyDesc": "Enter the 6-digit code sent to your phone",
+    "codeSentTo": "Code sent to",
+    "verify": "Verify",
+    "resendCode": "Resend Code",
+    "resendIn": "Resend in",
+    "changePhone": "Change phone number",
+    "termsAgree": "By continuing, you agree to our Terms of Service and Privacy Policy"
+  },
+  "home": {
+    "hero": {
+      "title": "Buy & Sell Game Skins Securely",
+      "subtitle": "The trusted marketplace for game skins, accounts, and items. Trade safely with verified sellers.",
+      "browseCta": "Browse Listings",
+      "sellCta": "Start Selling",
+      "slide1": {
+        "title": "Trade Game Skins",
+        "subtitle": "Buy and sell rare skins from top games",
+        "cta": "Explore Now"
+      },
+      "slide2": {
+        "title": "Verified Sellers",
+        "subtitle": "All traders pass KYC verification for safe deals",
+        "cta": "Start Trading"
+      },
+      "slide3": {
+        "title": "Best Prices",
+        "subtitle": "Find the best deals on gaming items",
+        "cta": "Browse Deals"
+      },
+      "slide4": {
+        "title": "Rust Trading",
+        "subtitle": "Trade valuable Rust items, weapons, and resources"
+      },
+      "slide5": {
+        "title": "Team Fortress 2",
+        "subtitle": "Buy and sell TF2 hats, weapons, and rare items"
+      },
+      "slide6": {
+        "title": "GTA V Online",
+        "subtitle": "Premium GTA V accounts and in-game currency trading"
+      },
+      "slide7": {
+        "title": "ARK Trading",
+        "subtitle": "Trade ARK accounts, creatures, and valuable resources"
+      },
+      "tradeNow": "Trade Now",
+      "startSelling": "Start Selling",
+      "stats": {
+        "skins": "Skins & Items",
+        "currency": "In-Game Currency",
+        "boosting": "Account Boosting"
+      }
+    },
+    "games": {
+      "title": "Popular Games",
+      "subtitle": "Find skins from your favorite games"
+    },
+    "featured": {
+      "title": "Featured Listings",
+      "subtitle": "Hand-picked deals just for you"
+    },
+    "features": {
+      "secure": {
+        "title": "Secure Trading",
+        "description": "All sellers are verified through our KYC process for safe transactions."
+      },
+      "fast": {
+        "title": "Fast & Easy",
+        "description": "List your items in minutes and connect with buyers instantly."
+      },
+      "community": {
+        "title": "Trusted Community",
+        "description": "Join thousands of traders in our growing marketplace."
+      }
+    },
+    "stats": {
+      "activeListings": "Active Listings",
+      "verifiedSellers": "Verified Sellers",
+      "successfulTrades": "Successful Trades"
+    },
+    "whyChoose": {
+      "title": "Why Choose",
+      "subtitle": "The most trusted marketplace for gaming items with secure transactions"
+    },
+    "cta": {
+      "title": "Ready to Start",
+      "trading": "Trading",
+      "subtitle": "Join thousands of traders and find the best deals on gaming items today.",
+      "browse": "Browse Listings",
+      "create": "Create Account"
+    },
+    "services": {
+      "title": "Our Services",
+      "subtitle": "Everything you need for your gaming experience",
+      "skins": {
+        "title": "Game Skins",
+        "description": "Buy and sell rare skins from CS2, Dota 2, and other popular games"
+      },
+      "currency": {
+        "title": "In-Game Currency",
+        "description": "Get gold, credits, coins and other in-game currencies at the best rates"
+      },
+      "boosting": {
+        "title": "Account Boosting",
+        "description": "Level up your rank with our professional boosting services"
+      },
+      "accounts": {
+        "title": "Game Accounts",
+        "description": "Buy verified accounts with rare items and high rankings"
+      }
+    }
+  },
+  "posts": {
+    "title": "All Listings",
+    "subtitle": "Find your perfect gaming items",
+    "noPostsFound": "No listings found",
+    "tryDifferentFilters": "Try adjusting your filters",
+    "createFirst": "Create your first listing to get started",
+    "notFound": "Listing not found",
+    "backToList": "Back to listings",
+    "seenAll": "You've seen all listings",
+    "browseListings": "Browse Listings"
+  },
+  "post": {
+    "title": "Title",
+    "titlePlaceholder": "Enter a descriptive title",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe your item in detail...",
+    "game": "Game",
+    "type": "Type",
+    "price": "Price",
+    "currency": "Currency",
+    "images": "Images",
+    "create": "Create Listing",
+    "createTitle": "Create New Listing",
+    "createDesc": "Fill in the details to list your item for sale",
+    "editTitle": "Edit Listing",
+    "seller": "Seller",
+    "contactSeller": "Contact Seller",
+    "postedOn": "Posted on",
+    "noDescription": "No description provided",
+    "confirmDelete": "Are you sure you want to delete this listing?",
+    "kycRequired": "Verification Required",
+    "kycRequiredDesc": "You need to complete identity verification before you can create listings.",
+    "goToKyc": "Complete Verification",
+    "whyKyc": "Why KYC?",
+    "kycBenefit1": "Protects buyers from scams",
+    "kycBenefit2": "Builds trust in the marketplace",
+    "kycBenefit3": "Your identity stays private",
+    "tips": {
+      "title": "Tips for a great listing",
+      "tip1": "Use clear, high-quality screenshots",
+      "tip2": "Be specific about what's included",
+      "tip3": "Set a competitive price",
+      "tip4": "Respond quickly to messages"
+    },
+    "types": {
+      "skin": "Skin",
+      "account": "Account",
+      "item": "Item",
+      "currency": "In-Game Currency",
+      "boosting": "Boosting"
+    },
+    "status": {
+      "active": "Active",
+      "sold": "Sold",
+      "draft": "Draft",
+      "removed": "Removed"
+    },
+    "views": "views",
+    "myListings": "My Listings"
+  },
+  "filters": {
+    "title": "Filters",
+    "search": "Search",
+    "searchPlaceholder": "Search listings...",
+    "game": "Game",
+    "type": "Type",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "priceRange": "Price Range",
+    "sortBy": "Sort By",
+    "reset": "Reset Filters",
+    "newest": "Newest First",
+    "oldest": "Oldest First",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low"
+  },
+  "profile": {
+    "title": "Profile Information",
+    "name": "Name",
+    "fullName": "Full Name",
+    "email": "Email",
+    "emailHint": "Optional - for account recovery",
+    "phone": "Phone Number",
+    "location": "Location",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself...",
+    "bioHint": "Tell others about yourself",
+    "edit": "Edit Profile",
+    "memberSince": "Member since",
+    "posts": "Posts",
+    "listings": "Listings",
+    "sales": "Sales",
+    "sold": "Sold",
+    "rating": "Rating",
+    "welcome": "Welcome!",
+    "completeProfile": "Please complete your profile to get started.",
+    "updateSuccess": "Profile updated successfully",
+    "quickActions": "Quick Actions",
+    "statistics": "Statistics",
+    "verifiedSeller": "Verified Seller",
+    "unverified": "Unverified",
+    "identityVerified": "Identity Verified",
+    "verifyIdentity": "Verify Your Identity",
+    "verifiedDesc": "Your account is verified. You can create listings and trade safely.",
+    "unverifiedDesc": "Complete KYC verification to start selling on the marketplace.",
+    "startVerification": "Start Verification"
+  },
+  "kyc": {
+    "title": "Identity Verification",
+    "subtitle": "Complete verification to start selling on SkinTrader",
+    "documentTitle": "ID Document",
+    "documentDesc": "Upload a clear photo of your passport or ID card",
+    "selfieTitle": "Selfie",
+    "selfieDesc": "Take a selfie holding your ID document",
+    "clickToUpload": "Click to upload",
+    "takeOrUploadSelfie": "Take or upload a selfie",
+    "maxFileSize": "Max file size: 10MB",
+    "submit": "Submit for Review",
+    "startSelling": "Start Selling",
+    "notSubmitted": "Not Verified",
+    "notSubmittedDesc": "Complete identity verification to start selling",
+    "pending": "Under Review",
+    "pendingDesc": "Your documents are being reviewed. This usually takes 1-2 business days.",
+    "approved": "Verified",
+    "approvedDesc": "Your identity has been verified. You can now create listings.",
+    "rejected": "Verification Failed",
+    "rejectedDesc": "Your verification was rejected. Please try again with valid documents.",
+    "youreVerified": "You're Verified!",
+    "verifiedMessage": "Your identity has been verified. You can now create listings and trade on the marketplace.",
+    "verificationInProgress": "Verification in Progress",
+    "reviewingDocs": "We're reviewing your documents. This usually takes 24-48 hours. We'll notify you once it's complete.",
+    "statusPending": "Status: Pending Review",
+    "submittedRecently": "Submitted recently",
+    "browseWhileWait": "Browse Listings While You Wait",
+    "uploadDocument": "Upload ID Document",
+    "uploadDocumentDesc": "Upload a clear photo of your passport, driver's license, or national ID card.",
+    "takeSelfie": "Take a Selfie",
+    "takeSelfieDesc": "Take a clear selfie to verify your identity matches the document.",
+    "requirements": "Requirements",
+    "req1": "Document must be valid and not expired",
+    "req2": "All text must be clearly readable",
+    "req3": "No glare or shadows on photo",
+    "selfieTips": "Tips for a good selfie",
+    "selfieTip1": "Face the camera directly",
+    "selfieTip2": "Good lighting, no shadows on face",
+    "selfieTip3": "Remove glasses and hats",
+    "securityNote": "Your documents are encrypted and securely stored. We only use them to verify your identity and will never share them with third parties.",
+    "status": {
+      "none": "Not Verified",
+      "pending": "Pending",
+      "approved": "Verified",
+      "rejected": "Rejected"
+    },
+    "step": {
+      "document": "Document",
+      "selfie": "Selfie"
+    }
+  },
+  "messages": {
+    "title": "Messages",
+    "noConversations": "No conversations yet",
+    "noMessages": "No messages",
+    "selectConversation": "Select a conversation to start chatting",
+    "startConversation": "Send a message to start the conversation",
+    "typePlaceholder": "Type a message...",
+    "loading": "Loading messages...",
+    "loadingConversations": "Loading conversations...",
+    "emptyTitle": "No messages yet",
+    "emptyDesc": "Start a conversation by contacting a seller from their listing page.",
+    "chooseConversation": "Choose a conversation from the list to start messaging."
+  },
+  "admin": {
+    "login": "Admin Login",
+    "username": "Username",
+    "password": "Password",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "kycReview": "KYC Review",
+    "posts": "Posts",
+    "totalUsers": "Total Users",
+    "totalPosts": "Total Posts",
+    "pendingKyc": "Pending KYC",
+    "activePosts": "Active Posts",
+    "recentUsers": "Recent Users",
+    "recentPosts": "Recent Posts",
+    "noRecentUsers": "No recent users",
+    "noRecentPosts": "No recent posts",
+    "user": "User",
+    "phone": "Phone",
+    "kycStatus": "KYC Status",
+    "joined": "Joined",
+    "noUsers": "No users found",
+    "noPendingKyc": "No pending KYC requests",
+    "submittedOn": "Submitted on",
+    "review": "Review",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rejectionReason": "Rejection Reason",
+    "rejectionReasonPlaceholder": "Enter the reason for rejection...",
+    "seller": "Seller",
+    "type": "Type",
+    "price": "Price",
+    "status": "Status",
+    "date": "Date",
+    "noPosts": "No posts found",
+    "postActions": "Post Actions",
+    "removePost": "Remove Post",
+    "restorePost": "Restore Post",
+    "viewAll": "View All",
+    "welcomeBack": "Welcome back! Here's your overview.",
+    "backToSite": "Back to Site",
+    "loadingDashboard": "Loading dashboard..."
+  },
+  "footer": {
+    "description": "The trusted marketplace for buying and selling game skins, accounts, and items.",
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "help": "Help Center",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "rights": "All rights reserved.",
+    "systemStatus": "All systems operational",
+    "social": {
+      "telegram": "Telegram",
+      "discord": "Discord",
+      "twitter": "Twitter"
+    }
+  },
+  "errors": {
+    "pageNotFound": "Page Not Found",
+    "pageNotFoundDesc": "The page you are looking for does not exist or has been moved.",
+    "loginFailed": "Login failed. Please check your credentials.",
+    "networkError": "Network error. Please try again.",
+    "listingNotFound": "The listing you're looking for doesn't exist or has been removed."
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "invalidPhone": "Invalid phone number"
+  },
+  "card": {
+    "viewDetails": "View Details"
+  },
+  "modal": {
+    "deleteTitle": "Delete Listing",
+    "deleteConfirm": "Are you sure?",
+    "deleteWarning": "This action cannot be undone. The listing will be permanently deleted."
+  },
+  "stats": {
+    "active": "Active",
+    "sold": "Sold",
+    "drafts": "Drafts"
+  },
+  "manage": {
+    "title": "Manage your listings"
+  }
+}
