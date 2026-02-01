@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useApi } from '../hooks/useApi'
 import useSound from '../hooks/useSound'
 import { ENDPOINTS } from '../config/api'
+import { getResponseData } from '../utils/apiHelpers'
 
 export default function CreatePost() {
   const navigate = useNavigate()
@@ -18,27 +19,40 @@ export default function CreatePost() {
   const { play } = useSound()
 
   const handleSubmit = async (formData) => {
-    const submitData = new FormData()
-    submitData.append('title', formData.title)
-    submitData.append('description', formData.description)
-    submitData.append('price', formData.price)
-    submitData.append('currency', formData.currency)
-    submitData.append('type', formData.type)
-    submitData.append('game_id', formData.game_id)
+    try {
+      const submitData = new FormData()
+      submitData.append('title', formData.title)
+      submitData.append('description', formData.description)
+      submitData.append('price', formData.price)
+      submitData.append('currency', formData.currency)
+      submitData.append('type', formData.type)
+      submitData.append('game_id', formData.game_id)
 
-    formData.images.forEach((image) => {
-      if (image.file) {
-        submitData.append(`images`, image.file)
+      formData.images.forEach((image) => {
+        if (image.file) {
+          submitData.append('images', image.file)
+        }
+      })
+
+      const { data, error: apiError } = await post(ENDPOINTS.POSTS, submitData)
+
+      if (data) {
+        play('success')
+        // Backend returns: { data: { post: {...} } }
+        const postId = getResponseData(data, 'post', '_id') || data.post?._id || data._id
+        if (postId) {
+          navigate(`/posts/${postId}`)
+        } else {
+          console.error('Post created but no ID returned:', data)
+          navigate('/my-posts')
+        }
+      } else {
+        play('error')
+        console.error('Post creation failed:', apiError)
       }
-    })
-
-    const { data } = await post(ENDPOINTS.POSTS, submitData)
-
-    if (data) {
-      play('success')
-      navigate(`/posts/${data._id}`)
-    } else {
+    } catch (err) {
       play('error')
+      console.error('Post creation error:', err)
     }
   }
 

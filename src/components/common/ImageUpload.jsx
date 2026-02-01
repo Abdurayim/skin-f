@@ -33,16 +33,24 @@ export default function ImageUpload({
 
     const newFiles = validFiles.slice(0, maxFiles - value.length)
 
-    newFiles.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        onChange([...value, {
-          file,
-          preview: e.target.result,
-          name: file.name
-        }])
-      }
-      reader.readAsDataURL(file)
+    // Collect all file read promises
+    const filePromises = newFiles.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          resolve({
+            file,
+            preview: e.target.result,
+            name: file.name
+          })
+        }
+        reader.readAsDataURL(file)
+      })
+    })
+
+    // Wait for all files to be read, then call onChange once
+    Promise.all(filePromises).then(loadedFiles => {
+      onChange([...value, ...loadedFiles])
     })
   }
 

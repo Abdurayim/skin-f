@@ -88,7 +88,11 @@ export default function KYC() {
         console.log('[KYC] Success! Refreshing profile...')
         play('success')
         await refreshProfile()
-        console.log('[KYC] Profile refreshed')
+        console.log('[KYC] Profile refreshed, redirecting...')
+        // Redirect to create-post page or profile page
+        const redirectTo = sessionStorage.getItem('kyc_return_path') || '/create-post'
+        sessionStorage.removeItem('kyc_return_path')
+        navigate(redirectTo)
       } else {
         console.error('[KYC] Verification failed:', verifyError)
         setErrors({ submit: verifyError || 'Verification failed' })

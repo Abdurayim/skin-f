@@ -8,6 +8,7 @@ import { PageLoader } from '../components/common/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { useApi } from '../hooks/useApi'
 import { ENDPOINTS } from '../config/api'
+import { getResponseData } from '../utils/apiHelpers'
 
 export default function EditPost() {
   const { id } = useParams()
@@ -20,17 +21,21 @@ export default function EditPost() {
 
   useEffect(() => {
     const fetchPost = async () => {
-      const { data } = await get(ENDPOINTS.POST_BY_ID(id))
+      const { data, error: apiError } = await get(ENDPOINTS.POST_BY_ID(id))
       if (data) {
+        // Backend may return { data: { post: {...} } } or { data: {...} }
+        const post = data.post || data
         setPostData({
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          currency: data.currency,
-          type: data.type,
-          game_id: data.game_id,
-          images: data.images?.map(url => ({ url, preview: url })) || []
+          title: post.title,
+          description: post.description,
+          price: post.price,
+          currency: post.currency,
+          type: post.type,
+          game_id: post.game_id,
+          images: post.images?.map(url => ({ url, preview: url })) || []
         })
+      } else if (apiError) {
+        console.error('Failed to fetch post:', apiError)
       }
       setFetchLoading(false)
     }
@@ -38,26 +43,33 @@ export default function EditPost() {
   }, [id, get])
 
   const handleSubmit = async (formData) => {
-    const submitData = new FormData()
-    submitData.append('title', formData.title)
-    submitData.append('description', formData.description)
-    submitData.append('price', formData.price)
-    submitData.append('currency', formData.currency)
-    submitData.append('type', formData.type)
-    submitData.append('game_id', formData.game_id)
+    try {
+      const submitData = new FormData()
+      submitData.append('title', formData.title)
+      submitData.append('description', formData.description)
+      submitData.append('price', formData.price)
+      submitData.append('currency', formData.currency)
+      submitData.append('type', formData.type)
+      submitData.append('game_id', formData.game_id)
 
-    formData.images.forEach((image) => {
-      if (image.file) {
-        submitData.append('images', image.file)
-      } else if (image.url) {
-        submitData.append('existing_images', image.url)
+      formData.images.forEach((image) => {
+        if (image.file) {
+          submitData.append('images', image.file)
+        } else if (image.url) {
+          submitData.append('existing_images', image.url)
+        }
+      })
+
+      const { data, error: apiError } = await put(ENDPOINTS.POST_BY_ID(id), submitData)
+
+      if (data && !apiError) {
+        // Successfully updated, navigate to the post
+        navigate(`/posts/${id}`)
+      } else {
+        console.error('Failed to update post:', apiError)
       }
-    })
-
-    const { data } = await put(ENDPOINTS.POST_BY_ID(id), submitData)
-
-    if (data) {
-      navigate(`/posts/${id}`)
+    } catch (err) {
+      console.error('Post update error:', err)
     }
   }
 

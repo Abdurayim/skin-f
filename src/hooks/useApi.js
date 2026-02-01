@@ -1,14 +1,32 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { API_BASE_URL } from '../config/api'
 import { apiLogger } from '../utils/logger'
 
 export function useApi() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const isMountedRef = useRef(true)
+  const abortControllerRef = useRef(null)
+
+  useEffect(() => {
+    isMountedRef.current = true
+    return () => {
+      isMountedRef.current = false
+      // Abort any pending requests when component unmounts
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+    }
+  }, [])
 
   const request = useCallback(async (endpoint, options = {}) => {
-    setLoading(true)
-    setError(null)
+    // Create new AbortController for this request
+    abortControllerRef.current = new AbortController()
+
+    if (isMountedRef.current) {
+      setLoading(true)
+      setError(null)
+    }
 
     const fullUrl = `${API_BASE_URL}${endpoint}`
     const method = options.method || 'GET'
@@ -27,7 +45,8 @@ export function useApi() {
 
       const config = {
         ...options,
-        headers
+        headers,
+        signal: abortControllerRef.current.signal
       }
 
       if (options.body && typeof options.body === 'object' && !(options.body instanceof FormData)) {
@@ -55,6 +74,11 @@ export function useApi() {
 
       return { data, error: null }
     } catch (err) {
+      // Don't log or set state if request was aborted
+      if (err.name === 'AbortError') {
+        return { data: null, error: 'Request cancelled' }
+      }
+
       // Check if it's a network/connection error
       if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
         apiLogger.logConnectionError(fullUrl, err)
@@ -64,10 +88,14 @@ export function useApi() {
         apiLogger.logError(null, err)
       }
 
-      setError(err.message)
+      if (isMountedRef.current) {
+        setError(err.message)
+      }
       return { data: null, error: err.message }
     } finally {
-      setLoading(false)
+      if (isMountedRef.current) {
+        setLoading(false)
+      }
     }
   }, [])
 
