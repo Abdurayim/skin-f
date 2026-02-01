@@ -45,6 +45,14 @@ export function validatePost(data) {
     errors.title = 'Title must be less than 200 characters'
   }
 
+  if (!data.description || data.description.trim().length < 10) {
+    errors.description = 'Description must be at least 10 characters'
+  }
+
+  if (data.description && data.description.length > 2000) {
+    errors.description = 'Description must be less than 2000 characters'
+  }
+
   if (!data.game_id) {
     errors.game_id = 'Please select a game'
   }
@@ -59,6 +67,10 @@ export function validatePost(data) {
 
   if (!data.type) {
     errors.type = 'Please select a type'
+  }
+
+  if (!data.images || data.images.length === 0) {
+    errors.images = 'Please upload at least one image'
   }
 
   return {

@@ -11,9 +11,11 @@ export default function GameSelector({ value, onChange, error }) {
 
   useEffect(() => {
     const fetchGames = async () => {
-      const { data } = await get(ENDPOINTS.GAMES)
+      const { data, error: apiError } = await get(ENDPOINTS.GAMES)
       if (data) {
         setGames(data)
+      } else if (apiError) {
+        console.error('Failed to fetch games:', apiError)
       }
     }
     fetchGames()

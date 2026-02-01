@@ -38,16 +38,18 @@ export default function Login() {
   const handleOTPSubmit = async (otp) => {
     setLoading(true)
     const result = await confirmOTP(otp)
-    setLoading(false)
 
     if (result.success) {
       play('success')
+      // Keep loading state active during navigation
       if (result.isNewUser) {
         navigate('/profile', { state: { isNew: true } })
       } else {
         navigate(from, { replace: true })
       }
+      // Loading will clear when component unmounts
     } else {
+      setLoading(false)
       play('error')
     }
   }

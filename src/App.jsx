@@ -34,7 +34,7 @@ export default function App() {
       <Route
         path="/create-post"
         element={
-          <ProtectedRoute requireKYC>
+          <ProtectedRoute>
             <CreatePost />
           </ProtectedRoute>
         }

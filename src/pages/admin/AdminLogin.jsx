@@ -12,7 +12,7 @@ export default function AdminLogin() {
   const { t } = useLanguage()
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   })
   const [loading, setLoading] = useState(false)
@@ -33,8 +33,20 @@ export default function AdminLogin() {
       const data = await response.json()
 
       if (response.ok) {
-        localStorage.setItem('admin_token', data.token)
-        navigate('/admin/dashboard')
+        // Backend returns: { data: { admin: {...}, tokens: {...} } }
+        const tokens = data.data?.tokens || data.tokens
+        const adminInfo = data.data?.admin || data.admin
+
+        if (tokens?.accessToken) {
+          localStorage.setItem('admin_token', tokens.accessToken)
+          localStorage.setItem('admin_refresh_token', tokens.refreshToken)
+          if (adminInfo) {
+            localStorage.setItem('admin_info', JSON.stringify(adminInfo))
+          }
+          navigate('/admin/dashboard')
+        } else {
+          setError('Invalid response format from server')
+        }
       } else {
         setError(data.message || t('errors.loginFailed'))
       }
@@ -64,14 +76,17 @@ export default function AdminLogin() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label={t('admin.username')}
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              type="email"
+              label="Admin Email"
+              placeholder="admin@skintrader.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
             />
             <Input
               type="password"
-              label={t('admin.password')}
+              label="Password"
+              placeholder="Enter admin password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required

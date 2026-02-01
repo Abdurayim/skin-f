@@ -15,6 +15,8 @@ export default function ProtectedRoute({ children, requireKYC = false }) {
   }
 
   if (requireKYC && !isKYCVerified) {
+    // Store the intended destination so KYC page can redirect back after success
+    sessionStorage.setItem('kyc_return_path', location.pathname)
     return <Navigate to="/kyc" state={{ from: location }} replace />
   }
 

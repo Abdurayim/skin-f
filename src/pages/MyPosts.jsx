@@ -22,9 +22,14 @@ export default function MyPosts() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const { data } = await get(`${ENDPOINTS.MY_POSTS}?status=${activeTab}`)
+      const { data, error: apiError } = await get(`${ENDPOINTS.MY_POSTS}?status=${activeTab}`)
       if (data) {
-        setPosts(data.data?.posts || data.posts || data.data || [])
+        // Backend returns: { data: { posts: [...] } } or { data: [...] }
+        const posts = data.posts || data.data?.posts || data.data || []
+        setPosts(posts)
+      } else if (apiError) {
+        console.error('Failed to fetch posts:', apiError)
+        setPosts([])
       }
     }
     fetchPosts()
