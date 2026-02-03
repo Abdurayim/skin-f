@@ -30,8 +30,8 @@ export default function KYCReview() {
       if (response.ok) {
         setKycRequests(data)
       }
-    } catch (err) {
-      console.error('Failed to fetch KYC requests:', err)
+    } catch {
+      // KYC requests fetch failed silently
     } finally {
       setLoading(false)
     }
@@ -60,8 +60,8 @@ export default function KYCReview() {
         setSelectedKyc(null)
         setRejectionReason('')
       }
-    } catch (err) {
-      console.error('Failed to review KYC:', err)
+    } catch {
+      // KYC review failed silently
     } finally {
       setReviewLoading(false)
     }

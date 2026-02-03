@@ -24,15 +24,13 @@ export function AuthProvider({ children }) {
       })
       if (response.ok) {
         const result = await response.json()
-        console.log('[Auth] Profile response:', result)
         // Backend returns { success, message, data: { user: {...} } }
         const userData = result.data?.user || result.data || result
-        console.log('[Auth] User data:', userData)
         setProfile(userData)
         return userData
       }
-    } catch (err) {
-      console.error('Failed to fetch profile:', err)
+    } catch {
+      // Profile fetch failed silently
     }
     return null
   }, [])
@@ -101,7 +99,6 @@ export function AuthProvider({ children }) {
       } else {
         const errorData = await response.json().catch(() => null)
         const errorMessage = errorData?.message || errorData?.error || `Backend returned ${response.status}`
-        console.error('Backend auth error:', response.status, errorData)
         throw new Error(errorMessage)
       }
     } catch (err) {
@@ -121,8 +118,8 @@ export function AuthProvider({ children }) {
           }
         })
       }
-    } catch (err) {
-      console.error('Logout error:', err)
+    } catch {
+      // Logout API call failed, continue with local cleanup
     } finally {
       if (auth) {
         await signOut(auth)

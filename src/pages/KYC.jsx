@@ -37,9 +37,7 @@ export default function KYC() {
       return
     }
 
-    // Debug: Check if token exists
     const token = localStorage.getItem('accessToken')
-    console.log('[KYC] Access Token:', token ? 'Present' : 'Missing')
     if (!token) {
       play('error')
       setErrors({ submit: 'Please log in again to continue' })
@@ -48,58 +46,45 @@ export default function KYC() {
 
     try {
       // Upload ID document
-      console.log('[KYC] Step 1: Uploading ID document...')
       const docFormData = new FormData()
       docFormData.append('document', document)
       docFormData.append('documentType', 'id_card')
 
       const { data: docData, error: docError } = await post(ENDPOINTS.KYC_UPLOAD, docFormData)
-      console.log('[KYC] ID upload response:', { data: docData, error: docError })
 
       if (!docData || docError) {
-        console.error('[KYC] ID document upload failed:', docError)
         setErrors({ submit: docError || 'Failed to upload ID document' })
         play('error')
         return
       }
 
       // Upload selfie
-      console.log('[KYC] Step 2: Uploading selfie...')
       const selfieFormData = new FormData()
       selfieFormData.append('document', selfie)
       selfieFormData.append('documentType', 'selfie')
 
       const { data: selfieData, error: selfieError } = await post(ENDPOINTS.KYC_UPLOAD, selfieFormData)
-      console.log('[KYC] Selfie upload response:', { data: selfieData, error: selfieError })
 
       if (!selfieData || selfieError) {
-        console.error('[KYC] Selfie upload failed:', selfieError)
         setErrors({ submit: selfieError || 'Failed to upload selfie' })
         play('error')
         return
       }
 
       // Trigger KYC verification
-      console.log('[KYC] Step 3: Triggering verification...')
       const { data: verifyData, error: verifyError } = await post(ENDPOINTS.KYC_VERIFY)
-      console.log('[KYC] Verification response:', { data: verifyData, error: verifyError })
 
       if (verifyData) {
-        console.log('[KYC] Success! Refreshing profile...')
         play('success')
         await refreshProfile()
-        console.log('[KYC] Profile refreshed, redirecting...')
-        // Redirect to create-post page or profile page
         const redirectTo = sessionStorage.getItem('kyc_return_path') || '/create-post'
         sessionStorage.removeItem('kyc_return_path')
         navigate(redirectTo)
       } else {
-        console.error('[KYC] Verification failed:', verifyError)
         setErrors({ submit: verifyError || 'Verification failed' })
         play('error')
       }
     } catch (err) {
-      console.error('[KYC] Unexpected error:', err)
       setErrors({ submit: err.message || 'An unexpected error occurred' })
       play('error')
     }
