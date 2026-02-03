@@ -1,6 +1,4 @@
-import { apiLogger } from '../utils/logger'
-
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://targetschool.uz:8001/api'
 export const BACKEND_URL = API_BASE_URL.replace('/api', '')
 
 // Helper function to get full image URL
@@ -8,15 +6,6 @@ export const getImageUrl = (imagePath) => {
   if (!imagePath) return null
   if (imagePath.startsWith('http')) return imagePath
   return `${BACKEND_URL}/${imagePath}`
-}
-
-// Log API configuration on startup
-if (import.meta.env.DEV) {
-  apiLogger.info(`API Base URL configured: ${API_BASE_URL}`)
-  apiLogger.info(`Backend URL: ${BACKEND_URL}`)
-  if (!import.meta.env.VITE_API_BASE_URL) {
-    apiLogger.warn('VITE_API_BASE_URL not set in .env, using default: http://localhost:8080/api')
-  }
 }
 
 export const ENDPOINTS = {

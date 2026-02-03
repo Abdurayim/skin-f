@@ -31,8 +31,8 @@ export default function PostsManagement() {
       if (response.ok) {
         setPosts(data.posts || data)
       }
-    } catch (err) {
-      console.error('Failed to fetch posts:', err)
+    } catch {
+      // Posts fetch failed silently
     } finally {
       setLoading(false)
     }
@@ -55,8 +55,8 @@ export default function PostsManagement() {
         }
         setSelectedPost(null)
       }
-    } catch (err) {
-      console.error(`Failed to ${action} post:`, err)
+    } catch {
+      // Post action failed silently
     } finally {
       setActionLoading(false)
     }

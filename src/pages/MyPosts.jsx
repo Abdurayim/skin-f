@@ -27,8 +27,7 @@ export default function MyPosts() {
         // Backend returns: { data: { posts: [...] } } or { data: [...] }
         const posts = data.posts || data.data?.posts || data.data || []
         setPosts(posts)
-      } else if (apiError) {
-        console.error('Failed to fetch posts:', apiError)
+      } else {
         setPosts([])
       }
     }

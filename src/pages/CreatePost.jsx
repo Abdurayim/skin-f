@@ -43,16 +43,13 @@ export default function CreatePost() {
         if (postId) {
           navigate(`/posts/${postId}`)
         } else {
-          console.error('Post created but no ID returned:', data)
           navigate('/my-posts')
         }
       } else {
         play('error')
-        console.error('Post creation failed:', apiError)
       }
-    } catch (err) {
+    } catch {
       play('error')
-      console.error('Post creation error:', err)
     }
   }
 

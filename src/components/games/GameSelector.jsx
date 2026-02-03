@@ -14,8 +14,6 @@ export default function GameSelector({ value, onChange, error }) {
       const { data, error: apiError } = await get(ENDPOINTS.GAMES)
       if (data) {
         setGames(data)
-      } else if (apiError) {
-        console.error('Failed to fetch games:', apiError)
       }
     }
     fetchGames()

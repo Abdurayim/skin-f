@@ -16,8 +16,8 @@ let auth = null
 try {
   app = initializeApp(firebaseConfig)
   auth = getAuth(app)
-} catch (error) {
-  console.warn('Firebase initialization failed:', error.message)
+} catch {
+  // Firebase initialization failed silently
 }
 
 export const setupRecaptcha = (containerId) => {

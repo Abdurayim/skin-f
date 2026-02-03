@@ -34,8 +34,6 @@ export default function EditPost() {
           game_id: post.game_id,
           images: post.images?.map(url => ({ url, preview: url })) || []
         })
-      } else if (apiError) {
-        console.error('Failed to fetch post:', apiError)
       }
       setFetchLoading(false)
     }
@@ -63,13 +61,10 @@ export default function EditPost() {
       const { data, error: apiError } = await put(ENDPOINTS.POST_BY_ID(id), submitData)
 
       if (data && !apiError) {
-        // Successfully updated, navigate to the post
         navigate(`/posts/${id}`)
-      } else {
-        console.error('Failed to update post:', apiError)
       }
-    } catch (err) {
-      console.error('Post update error:', err)
+    } catch {
+      // Update failed silently, error shown via Alert
     }
   }
 

@@ -4,7 +4,7 @@
  */
 
 const isDevelopment = import.meta.env.DEV
-const ENABLE_LOGS = isDevelopment || localStorage.getItem('ENABLE_API_LOGS') === 'true'
+const ENABLE_LOGS = isDevelopment && localStorage.getItem('DISABLE_API_LOGS') !== 'true'
 
 // Color codes for console
 const colors = {
@@ -184,18 +184,9 @@ class APILogger {
 // Export singleton instance
 export const apiLogger = new APILogger()
 
-// Expose to window for debugging
+// Only expose to window in development
 if (isDevelopment) {
   window.apiLogger = apiLogger
-  window.enableApiLogs = () => apiLogger.setEnabled(true)
-  window.disableApiLogs = () => apiLogger.setEnabled(false)
-
-  console.log(
-    '%c🔍 API Logger Available',
-    'background: #0a0e1a; color: #00d9ff; font-size: 14px; padding: 8px; border-radius: 4px; font-weight: bold;'
-  )
-  console.log('%cUse window.enableApiLogs() to enable detailed API logging', 'color: #a3a3a3;')
-  console.log('%cUse window.disableApiLogs() to disable logging', 'color: #a3a3a3;')
 }
 
 export default apiLogger

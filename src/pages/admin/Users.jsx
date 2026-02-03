@@ -24,8 +24,8 @@ export default function Users() {
         if (response.ok) {
           setUsers(data.users || data)
         }
-      } catch (err) {
-        console.error('Failed to fetch users:', err)
+      } catch {
+        // Users fetch failed silently
       } finally {
         setLoading(false)
       }
