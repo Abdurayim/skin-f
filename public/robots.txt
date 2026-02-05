@@ -1,0 +1,18 @@
+# robots.txt for skintrader.uz
+
+User-agent: *
+Allow: /
+Allow: /posts
+Allow: /login
+
+# Disallow protected/private routes
+Disallow: /admin/
+Disallow: /my-posts
+Disallow: /profile
+Disallow: /kyc
+Disallow: /messages
+Disallow: /create-post
+Disallow: /posts/*/edit
+
+# Sitemap location
+Sitemap: https://skintrader.uz/sitemap.xml
