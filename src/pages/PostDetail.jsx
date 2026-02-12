@@ -29,7 +29,7 @@ export default function PostDetail() {
     const fetchPost = async () => {
       const { data } = await get(ENDPOINTS.POST_BY_ID(id))
       if (data) {
-        setPostData(data.data || data)
+        setPostData(data.data?.post || data.data || data)
       }
     }
     fetchPost()
@@ -42,14 +42,15 @@ export default function PostDetail() {
     }
     play('click')
     setContactLoading(true)
-    const { data } = await apiPost(ENDPOINTS.CONVERSATIONS, {
-      postId: id,
-      recipientId: postData.userId || postData.user?._id
+    const { data } = await apiPost(ENDPOINTS.CONVERSATION_START, {
+      userId: postData.userId?._id || postData.userId || postData.user?._id,
+      postId: id
     })
     setContactLoading(false)
     if (data) {
       play('success')
-      navigate(`/messages?conversation=${data._id}`)
+      const convId = data.data?._id || data._id
+      navigate(`/messages?conversation=${convId}`)
     }
   }
 
@@ -105,7 +106,7 @@ export default function PostDetail() {
     item: 'success'
   }
 
-  const isOwner = user?.uid === postData.user?.firebase_uid
+  const isOwner = user?._id === (postData.userId?._id || postData.userId)
 
   return (
     <Layout>
@@ -200,9 +201,9 @@ export default function PostDetail() {
                 <Badge variant={typeVariants[postData.type] || 'default'} glow>
                   {t(`post.types.${postData.type}`)}
                 </Badge>
-                {postData.game && (
+                {(postData.game || postData.gameId) && (
                   <Badge variant="default">
-                    {postData.game.name}
+                    {(postData.game || postData.gameId).name}
                   </Badge>
                 )}
                 {postData.status === 'sold' && (
@@ -243,19 +244,19 @@ export default function PostDetail() {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden ring-2 ring-primary/30">
-                    {postData.user?.avatar ? (
+                    {postData.userId?.avatarUrl ? (
                       <img
-                        src={postData.user.avatar}
-                        alt={postData.user.name}
+                        src={postData.userId.avatarUrl}
+                        alt={postData.userId.displayName}
                         className="w-full h-full object-cover"
                       />
                     ) : (
                       <span className="text-primary font-bold text-xl">
-                        {postData.user?.name?.[0]?.toUpperCase() || 'U'}
+                        {postData.userId?.displayName?.[0]?.toUpperCase() || 'U'}
                       </span>
                     )}
                   </div>
-                  {postData.user?.kyc_verified && (
+                  {postData.userId?.kycStatus === 'verified' && (
                     <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center ring-2 ring-surface">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -265,13 +266,13 @@ export default function PostDetail() {
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-text-primary flex items-center gap-2">
-                    {postData.user?.name || t('common.user')}
-                    {postData.user?.kyc_verified && (
+                    {postData.userId?.displayName || t('common.user')}
+                    {postData.userId?.kycStatus === 'verified' && (
                       <span className="text-xs text-success">Verified</span>
                     )}
                   </p>
                   <p className="text-sm text-text-secondary">
-                    {t('profile.memberSince')} {formatDate(postData.user?.createdAt)}
+                    {t('profile.memberSince')} {formatDate(postData.createdAt)}
                   </p>
                 </div>
               </div>
@@ -329,7 +330,7 @@ export default function PostDetail() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                {postData.views || 0} views
+                {postData.viewsCount || 0} views
               </span>
             </div>
           </div>

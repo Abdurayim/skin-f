@@ -6,6 +6,7 @@ import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
 import { formatDate } from '../../utils/formatters'
+import { getImageUrl } from '../../config/api'
 
 export default function KYCReview() {
   const { t } = useLanguage()
@@ -23,12 +24,13 @@ export default function KYCReview() {
     setLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC}`, {
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_PENDING}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      const data = await response.json()
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
-        setKycRequests(data)
+        const requests = data.data?.users || data.data?.verifications || data.data?.requests || data.data || []
+        setKycRequests(Array.isArray(requests) ? requests : [])
       }
     } catch {
       // KYC requests fetch failed silently
@@ -37,26 +39,32 @@ export default function KYCReview() {
     }
   }
 
-  const handleReview = async (status) => {
+  const handleReview = async (action) => {
     if (!selectedKyc) return
 
+    const kycId = selectedKyc._id || selectedKyc.id
     setReviewLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_REVIEW(selectedKyc.id)}`, {
-        method: 'POST',
+      const endpoint = action === 'approved'
+        ? ENDPOINTS.ADMIN_KYC_APPROVE(kycId)
+        : ENDPOINTS.ADMIN_KYC_REJECT(kycId)
+
+      const body = action === 'rejected'
+        ? JSON.stringify({ reason: rejectionReason })
+        : undefined
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          status,
-          rejection_reason: status === 'rejected' ? rejectionReason : null
-        })
+        body
       })
 
       if (response.ok) {
-        setKycRequests(kycRequests.filter(k => k.id !== selectedKyc.id))
+        setKycRequests(kycRequests.filter(k => (k._id || k.id) !== kycId))
         setSelectedKyc(null)
         setRejectionReason('')
       }
@@ -95,19 +103,19 @@ export default function KYCReview() {
           <div className="grid gap-4 p-6">
             {kycRequests.map(kyc => (
               <div
-                key={kyc.id}
+                key={kyc._id || kyc.id}
                 className="flex items-center gap-4 p-4 bg-surface-hover rounded-lg"
               >
                 <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
                   <span className="text-white font-medium text-lg">
-                    {kyc.user?.name?.[0]?.toUpperCase() || 'U'}
+                    {kyc.displayName?.[0]?.toUpperCase() || 'U'}
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-text-primary font-medium">
-                    {kyc.user?.name || t('common.user')}
+                    {kyc.displayName || t('common.user')}
                   </p>
-                  <p className="text-text-secondary text-sm">{kyc.user?.phone}</p>
+                  <p className="text-text-secondary text-sm">{kyc.email}</p>
                   <p className="text-text-secondary text-xs mt-1">
                     {t('admin.submittedOn')} {formatDate(kyc.createdAt)}
                   </p>
@@ -137,21 +145,39 @@ export default function KYCReview() {
                 <h4 className="text-sm font-medium text-text-primary mb-2">
                   {t('kyc.documentTitle')}
                 </h4>
-                <img
-                  src={selectedKyc.document_url}
-                  alt="Document"
-                  className="w-full rounded-lg border border-border"
-                />
+                {(() => {
+                  const doc = selectedKyc.kycDocuments?.find(d => d.type === 'id_card' || d.type === 'passport')
+                  return doc ? (
+                    <img
+                      src={getImageUrl(doc.filePath)}
+                      alt="Document"
+                      className="w-full rounded-lg border border-border"
+                    />
+                  ) : (
+                    <div className="w-full h-48 rounded-lg border border-border bg-surface-hover flex items-center justify-center text-text-secondary">
+                      No document uploaded
+                    </div>
+                  )
+                })()}
               </div>
               <div>
                 <h4 className="text-sm font-medium text-text-primary mb-2">
                   {t('kyc.selfieTitle')}
                 </h4>
-                <img
-                  src={selectedKyc.selfie_url}
-                  alt="Selfie"
-                  className="w-full rounded-lg border border-border"
-                />
+                {(() => {
+                  const selfie = selectedKyc.kycDocuments?.find(d => d.type === 'selfie')
+                  return selfie ? (
+                    <img
+                      src={getImageUrl(selfie.filePath)}
+                      alt="Selfie"
+                      className="w-full rounded-lg border border-border"
+                    />
+                  ) : (
+                    <div className="w-full h-48 rounded-lg border border-border bg-surface-hover flex items-center justify-center text-text-secondary">
+                      No selfie uploaded
+                    </div>
+                  )
+                })()}
               </div>
             </div>
 

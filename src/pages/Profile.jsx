@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
 import ProfileCard from '../components/profile/ProfileCard'
@@ -21,6 +21,10 @@ export default function Profile() {
 
   const [isEditing, setIsEditing] = useState(location.state?.isNew || false)
   const [successMessage, setSuccessMessage] = useState('')
+
+  useEffect(() => {
+    refreshProfile()
+  }, [])
 
   const handleSubmit = async (formData) => {
     const { data } = await put(ENDPOINTS.USER_UPDATE_PROFILE, formData)
@@ -83,15 +87,15 @@ export default function Profile() {
             <div className="bg-surface border border-border rounded-2xl p-6 text-center">
               <div className="relative inline-block mb-4">
                 <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden ring-4 ring-primary/30">
-                  {profile?.avatar ? (
+                  {profile?.avatarUrl ? (
                     <img
-                      src={profile.avatar}
-                      alt={profile.name}
+                      src={profile.avatarUrl}
+                      alt={profile.displayName}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <span className="text-primary font-bold text-3xl">
-                      {profile?.name?.[0]?.toUpperCase() || 'U'}
+                      {profile?.displayName?.[0]?.toUpperCase() || 'U'}
                     </span>
                   )}
                 </div>
@@ -104,9 +108,9 @@ export default function Profile() {
                 )}
               </div>
               <h2 className="text-xl font-bold text-text-primary mb-1">
-                {profile?.name || 'User'}
+                {profile?.displayName || 'User'}
               </h2>
-              <p className="text-text-secondary text-sm mb-4">{profile?.phone}</p>
+              <p className="text-text-secondary text-sm mb-4">{profile?.email}</p>
               <div className="flex justify-center gap-2">
                 {isKYCVerified ? (
                   <Badge variant="success" glow>Verified Seller</Badge>
@@ -158,11 +162,11 @@ export default function Profile() {
               <h3 className="font-semibold text-text-primary px-2 mb-3">Statistics</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-surface-hover rounded-xl p-3 text-center">
-                  <p className="text-2xl font-bold text-primary">{profile?.posts_count || 0}</p>
+                  <p className="text-2xl font-bold text-primary">{profile?.postsCount || 0}</p>
                   <p className="text-xs text-text-secondary">Listings</p>
                 </div>
                 <div className="bg-surface-hover rounded-xl p-3 text-center">
-                  <p className="text-2xl font-bold text-success">{profile?.sold_count || 0}</p>
+                  <p className="text-2xl font-bold text-success">{0}</p>
                   <p className="text-xs text-text-secondary">Sold</p>
                 </div>
               </div>
@@ -215,11 +219,7 @@ export default function Profile() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-surface-hover rounded-xl p-4">
                         <p className="text-sm text-text-secondary mb-1">Full Name</p>
-                        <p className="text-text-primary font-medium">{profile?.name || '-'}</p>
-                      </div>
-                      <div className="bg-surface-hover rounded-xl p-4">
-                        <p className="text-sm text-text-secondary mb-1">Phone Number</p>
-                        <p className="text-text-primary font-medium">{profile?.phone || '-'}</p>
+                        <p className="text-text-primary font-medium">{profile?.displayName || '-'}</p>
                       </div>
                       <div className="bg-surface-hover rounded-xl p-4">
                         <p className="text-sm text-text-secondary mb-1">Email</p>

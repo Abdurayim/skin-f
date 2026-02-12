@@ -66,15 +66,15 @@ export default function ChatWindow({
 
         <div className="relative">
           <div className="w-11 h-11 rounded-full bg-primary/20 flex items-center justify-center ring-2 ring-primary/30">
-            {conversation.other_user?.avatar ? (
+            {conversation.otherParticipant?.avatarUrl ? (
               <img
-                src={conversation.other_user.avatar}
-                alt={conversation.other_user.name}
+                src={conversation.otherParticipant.avatarUrl}
+                alt={conversation.otherParticipant.displayName}
                 className="w-full h-full rounded-full object-cover"
               />
             ) : (
               <span className="text-primary font-bold">
-                {conversation.other_user?.name?.[0]?.toUpperCase() || 'U'}
+                {conversation.otherParticipant?.displayName?.[0]?.toUpperCase() || 'U'}
               </span>
             )}
           </div>
@@ -83,12 +83,12 @@ export default function ChatWindow({
 
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-text-primary truncate">
-            {conversation.other_user?.name || t('common.user')}
+            {conversation.otherParticipant?.displayName || t('common.user')}
           </h3>
-          {conversation.post && (
+          {conversation.initialPostId && (
             <p className="text-xs text-text-secondary truncate flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-              {conversation.post.title}
+              {conversation.initialPostId.title}
             </p>
           )}
         </div>
@@ -127,13 +127,13 @@ export default function ChatWindow({
             {/* Date separator could go here */}
             {messages.map((message, index) => (
               <div
-                key={message.id}
+                key={message._id}
                 className="animate-fade-in"
                 style={{ animationDelay: `${Math.min(index, 10) * 30}ms` }}
               >
                 <MessageBubble
                   message={message}
-                  isOwn={message.sender_id === user?.uid}
+                  isOwn={message.senderId === user?._id}
                 />
               </div>
             ))}

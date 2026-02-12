@@ -27,9 +27,10 @@ export default function PostsManagement() {
       const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POSTS}?page=${page}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      const data = await response.json()
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
-        setPosts(data.posts || data)
+        const list = data.data?.posts || data.data || []
+        setPosts(Array.isArray(list) ? list : [])
       }
     } catch {
       // Posts fetch failed silently
@@ -38,25 +39,21 @@ export default function PostsManagement() {
     }
   }
 
-  const handleAction = async (postId, action) => {
+  const handleDelete = async (postId) => {
     setActionLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}/admin/posts/${postId}/${action}`, {
-        method: 'POST',
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POST_DELETE(postId)}`, {
+        method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       })
 
       if (response.ok) {
-        if (action === 'delete') {
-          setPosts(posts.filter(p => p.id !== postId))
-        } else {
-          fetchPosts()
-        }
+        setPosts(posts.filter(p => (p._id || p.id) !== postId))
         setSelectedPost(null)
       }
     } catch {
-      // Post action failed silently
+      // Post delete failed silently
     } finally {
       setActionLoading(false)
     }
@@ -66,7 +63,7 @@ export default function PostsManagement() {
     active: 'success',
     pending: 'warning',
     sold: 'default',
-    removed: 'error'
+    inactive: 'error'
   }
 
   const typeVariants = {
@@ -118,7 +115,7 @@ export default function PostsManagement() {
                 </tr>
               ) : (
                 posts.map(post => (
-                  <tr key={post.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={post._id || post.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-surface overflow-hidden flex-shrink-0">
@@ -141,8 +138,8 @@ export default function PostsManagement() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-text-primary">{post.user?.name || t('common.user')}</p>
-                      <p className="text-text-secondary text-sm">{post.user?.phone}</p>
+                      <p className="text-text-primary">{post.userId?.displayName || t('common.user')}</p>
+                      <p className="text-text-secondary text-sm">{post.userId?.email}</p>
                     </td>
                     <td className="px-6 py-4">
                       <Badge variant={typeVariants[post.type] || 'default'}>
@@ -216,26 +213,14 @@ export default function PostsManagement() {
             </div>
 
             <div className="space-y-2">
-              {selectedPost.status !== 'removed' && (
-                <Button
-                  variant="danger"
-                  fullWidth
-                  loading={actionLoading}
-                  onClick={() => handleAction(selectedPost.id, 'remove')}
-                >
-                  {t('admin.removePost')}
-                </Button>
-              )}
-              {selectedPost.status === 'removed' && (
-                <Button
-                  variant="success"
-                  fullWidth
-                  loading={actionLoading}
-                  onClick={() => handleAction(selectedPost.id, 'restore')}
-                >
-                  {t('admin.restorePost')}
-                </Button>
-              )}
+              <Button
+                variant="danger"
+                fullWidth
+                loading={actionLoading}
+                onClick={() => handleDelete(selectedPost._id || selectedPost.id)}
+              >
+                {t('admin.removePost')}
+              </Button>
               <Button
                 variant="secondary"
                 fullWidth

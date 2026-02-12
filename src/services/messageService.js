@@ -7,7 +7,7 @@ export const messageService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getConversation(id, token) {
@@ -16,42 +16,30 @@ export const messageService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
-  async createConversation(postId, recipientId, token) {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.CONVERSATIONS}`, {
+  async startConversation(userId, postId, token) {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.CONVERSATION_START}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        post_id: postId,
-        recipient_id: recipientId
-      })
+      body: JSON.stringify({ userId, postId })
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
-  async getMessages(conversationId, token) {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.MESSAGES(conversationId)}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    return response.json()
-  },
-
-  async sendMessage(conversationId, content, token) {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.MESSAGES(conversationId)}`, {
+  async sendMessage(recipientId, content, postId, token) {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.SEND_MESSAGE}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ content })
+      body: JSON.stringify({ recipientId, content, postId })
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   }
 }

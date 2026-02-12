@@ -24,8 +24,22 @@ export default function Navbar() {
   const currentLang = availableLanguages.find(l => l.code === language)
 
   const navLinks = [
-    { path: '/create-post', label: t('nav.sell'), auth: true },
-    { path: '/messages', label: t('nav.messages'), auth: true }
+    {
+      path: '/demo', label: 'Demo', auth: false, highlight: true,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    },
+    {
+      path: '/posts', label: t('nav.browse') || 'Browse', auth: false,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    },
+    {
+      path: '/create-post', label: t('nav.sell'), auth: true,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+    },
+    {
+      path: '/messages', label: t('nav.messages'), auth: true,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+    }
   ]
 
   return (
@@ -49,27 +63,48 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-2">
               {navLinks.map((link) => {
                 if (link.auth && !isAuthenticated) return null
                 const isActive = location.pathname === link.path
+
+                if (link.highlight) {
+                  return (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      className={`
+                        flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300
+                        ${isActive
+                          ? 'bg-primary text-white glow-red-subtle'
+                          : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40'
+                        }
+                      `}
+                      onMouseEnter={() => play('hover')}
+                    >
+                      {link.icon}
+                      {link.label}
+                    </Link>
+                  )
+                }
 
                 return (
                   <Link
                     key={link.path}
                     to={link.path}
                     className={`
-                      relative px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300
+                      relative flex items-center gap-1.5 px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300
                       ${isActive
-                        ? 'text-primary'
-                        : 'text-text-secondary hover:text-text-primary'
+                        ? 'text-primary bg-primary/5 border border-primary/20'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover border border-transparent hover:border-border'
                       }
                     `}
                     onMouseEnter={() => play('hover')}
                   >
+                    {link.icon}
                     {link.label}
                     {isActive && (
-                      <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary glow-red" />
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary glow-red" />
                     )}
                   </Link>
                 )
@@ -120,11 +155,11 @@ export default function Navbar() {
                       onMouseEnter={() => play('hover')}
                     >
                       <div className="relative w-9 h-9 rounded-xl bg-primary flex items-center justify-center overflow-hidden group-hover:glow-red transition-all duration-300">
-                        {profile?.avatar ? (
-                          <img src={profile.avatar} alt="" className="w-full h-full object-cover" />
+                        {profile?.avatarUrl ? (
+                          <img src={profile.avatarUrl} alt="" className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-white font-semibold">
-                            {profile?.name?.[0]?.toUpperCase() || 'U'}
+                            {profile?.displayName?.[0]?.toUpperCase() || 'U'}
                           </span>
                         )}
                       </div>
@@ -135,8 +170,8 @@ export default function Navbar() {
                   }
                 >
                   <div className="px-4 py-3 border-b border-border">
-                    <p className="text-sm font-medium text-text-primary">{profile?.name || t('common.user')}</p>
-                    <p className="text-xs text-text-secondary mt-0.5">{profile?.phone}</p>
+                    <p className="text-sm font-medium text-text-primary">{profile?.displayName || t('common.user')}</p>
+                    <p className="text-xs text-text-secondary mt-0.5">{profile?.email}</p>
                   </div>
                   <DropdownItem
                     onClick={() => { play('click'); navigate('/profile') }}

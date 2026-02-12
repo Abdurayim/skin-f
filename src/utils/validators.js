@@ -1,28 +1,3 @@
-export function validatePhone(phone) {
-  const cleaned = phone.replace(/\D/g, '')
-
-  if (cleaned.length < 9) {
-    return { valid: false, error: 'Phone number is too short' }
-  }
-
-  if (cleaned.length > 15) {
-    return { valid: false, error: 'Phone number is too long' }
-  }
-
-  let formatted = phone.trim()
-  if (!formatted.startsWith('+')) {
-    if (cleaned.startsWith('998')) {
-      formatted = '+' + cleaned
-    } else if (cleaned.length === 9 && cleaned.startsWith('9')) {
-      formatted = '+998' + cleaned
-    } else {
-      formatted = '+' + cleaned
-    }
-  }
-
-  return { valid: true, formatted }
-}
-
 export function validateEmail(email) {
   if (!email) return { valid: true }
 

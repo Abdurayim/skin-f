@@ -27,9 +27,9 @@ export default function GameCard({ game, selected, onClick }) {
         )}
         <div>
           <h3 className="font-medium text-text-primary">{game.name}</h3>
-          {game.posts_count !== undefined && (
+          {game.postsCount !== undefined && (
             <p className="text-sm text-text-secondary">
-              {game.posts_count} listings
+              {game.postsCount} listings
             </p>
           )}
         </div>

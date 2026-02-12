@@ -8,7 +8,7 @@ export default function ProfileForm({ profile, onSubmit, loading }) {
   const { t } = useLanguage()
   const { play } = useSound()
   const [formData, setFormData] = useState({
-    name: '',
+    displayName: '',
     email: '',
     bio: ''
   })
@@ -17,7 +17,7 @@ export default function ProfileForm({ profile, onSubmit, loading }) {
   useEffect(() => {
     if (profile) {
       setFormData({
-        name: profile.name || '',
+        displayName: profile.displayName || '',
         email: profile.email || '',
         bio: profile.bio || ''
       })
@@ -35,8 +35,8 @@ export default function ProfileForm({ profile, onSubmit, loading }) {
     e.preventDefault()
 
     const newErrors = {}
-    if (!formData.name.trim()) {
-      newErrors.name = t('validation.required')
+    if (!formData.displayName.trim()) {
+      newErrors.displayName = t('validation.required')
     }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('validation.invalidEmail')
@@ -55,9 +55,9 @@ export default function ProfileForm({ profile, onSubmit, loading }) {
     <form onSubmit={handleSubmit} className="space-y-5">
       <Input
         label={t('profile.name')}
-        value={formData.name}
-        onChange={(e) => handleChange('name', e.target.value)}
-        error={errors.name}
+        value={formData.displayName}
+        onChange={(e) => handleChange('displayName', e.target.value)}
+        error={errors.displayName}
         required
         icon={
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

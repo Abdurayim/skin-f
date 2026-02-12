@@ -42,7 +42,7 @@ export default function Posts() {
     const { data } = await get(`${ENDPOINTS.POSTS}?${params.toString()}`)
 
     if (data) {
-      const newPosts = data.posts || data
+      const newPosts = data.data?.posts || data.posts || []
       if (append) {
         setPosts(prev => [...prev, ...newPosts])
       } else {

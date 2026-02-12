@@ -7,7 +7,7 @@ export const userService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async updateProfile(data, token) {
@@ -19,7 +19,7 @@ export const userService = {
       },
       body: JSON.stringify(data)
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getUser(id, token = null) {
@@ -28,7 +28,7 @@ export const userService = {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.USER_BY_ID(id)}`, {
       headers
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async uploadKYCDocument(formData, token) {
@@ -39,7 +39,7 @@ export const userService = {
       },
       body: formData
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async verifyKYC(token) {
@@ -49,7 +49,7 @@ export const userService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getKYCStatus(token) {
@@ -58,6 +58,6 @@ export const userService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   }
 }

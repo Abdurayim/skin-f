@@ -1,15 +1,15 @@
 import { API_BASE_URL, ENDPOINTS } from '../config/api'
 
 export const adminService = {
-  async login(username, password) {
+  async login(email, password) {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_LOGIN}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ email, password })
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getStats(token) {
@@ -18,7 +18,7 @@ export const adminService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getUsers(params = {}, token) {
@@ -29,31 +29,38 @@ export const adminService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getKYCRequests(token) {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC}`, {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_PENDING}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
-  async reviewKYC(id, status, rejectionReason, token) {
-    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_REVIEW(id)}`, {
-      method: 'POST',
+  async approveKYC(id, token) {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_APPROVE(id)}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    return response.json().catch(() => ({}))
+  },
+
+  async rejectKYC(id, reason, token) {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_REJECT(id)}`, {
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        status,
-        rejection_reason: rejectionReason
-      })
+      body: JSON.stringify({ reason })
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getPosts(params = {}, token) {
@@ -64,26 +71,16 @@ export const adminService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
-  async removePost(id, token) {
-    const response = await fetch(`${API_BASE_URL}/admin/posts/${id}/remove`, {
-      method: 'POST',
+  async deletePost(id, token) {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POST_DELETE(id)}`, {
+      method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
-  },
-
-  async restorePost(id, token) {
-    const response = await fetch(`${API_BASE_URL}/admin/posts/${id}/restore`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    return response.json()
+    return response.json().catch(() => ({}))
   }
 }

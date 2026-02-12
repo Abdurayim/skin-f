@@ -1,5 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/auth/ProtectedRoute'
+import AdminProtectedRoute from './components/auth/AdminProtectedRoute'
 
 // Pages
 import Home from './pages/Home'
@@ -12,6 +13,9 @@ import MyPosts from './pages/MyPosts'
 import Profile from './pages/Profile'
 import KYC from './pages/KYC'
 import Messages from './pages/Messages'
+import Subscription from './pages/Subscription'
+import PaymentCallback from './pages/PaymentCallback'
+import Demo from './pages/Demo'
 import NotFound from './pages/NotFound'
 
 // Admin Pages
@@ -20,6 +24,10 @@ import Dashboard from './pages/admin/Dashboard'
 import Users from './pages/admin/Users'
 import KYCReview from './pages/admin/KYCReview'
 import PostsManagement from './pages/admin/PostsManagement'
+import GamesManagement from './pages/admin/GamesManagement'
+import Subscriptions from './pages/admin/Subscriptions'
+import Reports from './pages/admin/Reports'
+import AuditLogs from './pages/admin/AuditLogs'
 
 export default function App() {
   return (
@@ -27,6 +35,7 @@ export default function App() {
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/demo" element={<Demo />} />
       <Route path="/posts" element={<Posts />} />
       <Route path="/posts/:id" element={<PostDetail />} />
 
@@ -79,13 +88,83 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/subscription"
+        element={
+          <ProtectedRoute>
+            <Subscription />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/payments/callback" element={<PaymentCallback />} />
 
       {/* Admin Routes */}
+      <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin/dashboard" element={<Dashboard />} />
-      <Route path="/admin/users" element={<Users />} />
-      <Route path="/admin/kyc" element={<KYCReview />} />
-      <Route path="/admin/posts" element={<PostsManagement />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <AdminProtectedRoute>
+            <Dashboard />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminProtectedRoute>
+            <Users />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/kyc"
+        element={
+          <AdminProtectedRoute>
+            <KYCReview />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/posts"
+        element={
+          <AdminProtectedRoute>
+            <PostsManagement />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/games"
+        element={
+          <AdminProtectedRoute>
+            <GamesManagement />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/subscriptions"
+        element={
+          <AdminProtectedRoute>
+            <Subscriptions />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <AdminProtectedRoute>
+            <Reports />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/logs"
+        element={
+          <AdminProtectedRoute>
+            <AuditLogs />
+          </AdminProtectedRoute>
+        }
+      />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />

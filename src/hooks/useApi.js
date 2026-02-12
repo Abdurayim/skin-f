@@ -1,6 +1,44 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { API_BASE_URL } from '../config/api'
+import { API_BASE_URL, ENDPOINTS } from '../config/api'
 import { apiLogger } from '../utils/logger'
+
+let isRefreshing = false
+let refreshPromise = null
+
+async function attemptTokenRefresh() {
+  if (isRefreshing) return refreshPromise
+
+  isRefreshing = true
+  refreshPromise = (async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken')
+      if (!refreshToken) return false
+
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_REFRESH_TOKEN}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken })
+      })
+
+      const data = await response.json().catch(() => null)
+
+      if (response.ok && data?.data?.tokens) {
+        localStorage.setItem('accessToken', data.data.tokens.accessToken)
+        localStorage.setItem('refreshToken', data.data.tokens.refreshToken)
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    } finally {
+      isRefreshing = false
+      refreshPromise = null
+    }
+  })()
+
+  return refreshPromise
+}
 
 export function useApi() {
   const [loading, setLoading] = useState(false)
@@ -12,15 +50,13 @@ export function useApi() {
     isMountedRef.current = true
     return () => {
       isMountedRef.current = false
-      // Abort any pending requests when component unmounts
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
       }
     }
   }, [])
 
-  const request = useCallback(async (endpoint, options = {}) => {
-    // Create new AbortController for this request
+  const request = useCallback(async (endpoint, options = {}, _isRetry = false) => {
     abortControllerRef.current = new AbortController()
 
     if (isMountedRef.current) {
@@ -57,10 +93,24 @@ export function useApi() {
         delete headers['Content-Type']
       }
 
-      // Log the request
       requestId = apiLogger.logRequest(method, fullUrl, config)
 
       const response = await fetch(fullUrl, config)
+
+      // On 401, attempt token refresh and retry once
+      if (response.status === 401 && !_isRetry) {
+        const refreshed = await attemptTokenRefresh()
+        if (refreshed) {
+          return request(endpoint, options, true)
+        }
+        // Refresh failed — clear tokens and redirect to login
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        localStorage.removeItem('user')
+        window.location.href = '/login'
+        return { data: null, error: 'Session expired' }
+      }
+
       const data = await response.json().catch(() => null)
 
       if (!response.ok) {
@@ -69,17 +119,14 @@ export function useApi() {
         throw new Error(errorMsg)
       }
 
-      // Log successful response
       apiLogger.logResponse(requestId, response.status, data)
 
       return { data, error: null }
     } catch (err) {
-      // Don't log or set state if request was aborted
       if (err.name === 'AbortError') {
         return { data: null, error: 'Request cancelled' }
       }
 
-      // Check if it's a network/connection error
       if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
         apiLogger.logConnectionError(fullUrl, err)
       } else if (requestId) {

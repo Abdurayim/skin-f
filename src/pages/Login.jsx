@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
 import Layout from '../components/layout/Layout'
-import PhoneInput from '../components/auth/PhoneInput'
-import OTPInput from '../components/auth/OTPInput'
 import Card, { CardHeader, CardTitle, CardDescription, CardContent } from '../components/common/Card'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
@@ -11,56 +10,33 @@ import useSound from '../hooks/useSound'
 export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { requestOTP, confirmOTP, error } = useAuth()
+  const { loginWithGoogle, error } = useAuth()
   const { t } = useLanguage()
   const { play } = useSound()
 
-  const [step, setStep] = useState('phone')
-  const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
 
   const from = location.state?.from?.pathname || '/'
 
-  const handlePhoneSubmit = async (phoneNumber) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     setLoading(true)
-    const success = await requestOTP(phoneNumber)
-    setLoading(false)
-
-    if (success) {
-      play('success')
-      setPhone(phoneNumber)
-      setStep('otp')
-    } else {
-      play('error')
-    }
-  }
-
-  const handleOTPSubmit = async (otp) => {
-    setLoading(true)
-    const result = await confirmOTP(otp)
+    const result = await loginWithGoogle(credentialResponse.credential)
 
     if (result.success) {
       play('success')
-      // Keep loading state active during navigation
       if (result.isNewUser) {
         navigate('/profile', { state: { isNew: true } })
       } else {
         navigate(from, { replace: true })
       }
-      // Loading will clear when component unmounts
     } else {
       setLoading(false)
       play('error')
     }
   }
 
-  const handleResendOTP = async () => {
-    setLoading(true)
-    const success = await requestOTP(phone)
-    setLoading(false)
-    if (success) {
-      play('notification')
-    }
+  const handleGoogleError = () => {
+    play('error')
   }
 
   return (
@@ -85,46 +61,35 @@ export default function Login() {
           <Card glass className="animate-fade-in-up" padding="lg">
             <CardHeader>
               <CardTitle className="text-center">
-                {step === 'phone' ? t('auth.login') : t('auth.verifyCode')}
+                {t('auth.login')}
               </CardTitle>
               <CardDescription className="text-center">
-                {step === 'phone'
-                  ? t('auth.loginDesc')
-                  : t('auth.verifyDesc')
-                }
+                {t('auth.loginDesc')}
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              {step === 'phone' ? (
-                <PhoneInput
-                  onSubmit={handlePhoneSubmit}
-                  loading={loading}
-                  error={error}
-                />
-              ) : (
-                <OTPInput
-                  phone={phone}
-                  onSubmit={handleOTPSubmit}
-                  onResend={handleResendOTP}
-                  loading={loading}
-                  error={error}
-                />
+              {error && (
+                <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                  {error}
+                </div>
               )}
 
-              {step === 'otp' && (
-                <button
-                  onClick={() => {
-                    play('click')
-                    setStep('phone')
-                  }}
-                  className="mt-6 w-full text-center text-sm text-text-secondary hover:text-primary transition-colors flex items-center justify-center gap-2"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  {t('auth.changePhone')}
-                </button>
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  theme="filled_black"
+                  size="large"
+                  width="360"
+                  text="signin_with"
+                />
+              </div>
+
+              {loading && (
+                <div className="mt-4 flex justify-center">
+                  <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                </div>
               )}
             </CardContent>
           </Card>
@@ -147,7 +112,6 @@ export default function Login() {
           </div>
         </div>
 
-        <div id="recaptcha-container" />
       </div>
     </Layout>
   )

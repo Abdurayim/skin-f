@@ -8,7 +8,7 @@ export const postService = {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.POSTS}?${queryString}`, {
       headers
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getPost(id, token = null) {
@@ -17,7 +17,7 @@ export const postService = {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.POST_BY_ID(id)}`, {
       headers
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async getMyPosts(params = {}, token) {
@@ -28,7 +28,7 @@ export const postService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async createPost(formData, token) {
@@ -39,7 +39,7 @@ export const postService = {
       },
       body: formData
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async updatePost(id, formData, token) {
@@ -50,7 +50,7 @@ export const postService = {
       },
       body: formData
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   },
 
   async deletePost(id, token) {
@@ -60,6 +60,6 @@ export const postService = {
         'Authorization': `Bearer ${token}`
       }
     })
-    return response.json()
+    return response.json().catch(() => ({}))
   }
 }

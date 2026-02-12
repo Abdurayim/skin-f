@@ -30,7 +30,7 @@ export default function AdminLogin() {
         body: JSON.stringify(formData)
       })
 
-      const data = await response.json()
+      const data = await response.json().catch(() => ({}))
 
       if (response.ok) {
         // Backend returns: { data: { admin: {...}, tokens: {...} } }

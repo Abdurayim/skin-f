@@ -25,16 +25,18 @@ export default function Messages() {
     setLoading(true)
     const { data } = await get(ENDPOINTS.CONVERSATIONS)
     if (data) {
-      setConversations(data)
+      const convs = data.data?.conversations || data.conversations || data.data || data
+      setConversations(Array.isArray(convs) ? convs : [])
     }
     setLoading(false)
   }, [])
 
   const fetchMessages = useCallback(async (conversationId) => {
     setMessagesLoading(true)
-    const { data } = await get(ENDPOINTS.MESSAGES(conversationId))
+    const { data } = await get(ENDPOINTS.CONVERSATION_BY_ID(conversationId))
     if (data) {
-      setMessages(data)
+      const msgs = data.data?.messages || data.messages || data.data || data
+      setMessages(Array.isArray(msgs) ? msgs : [])
     }
     setMessagesLoading(false)
   }, [])
@@ -59,13 +61,18 @@ export default function Messages() {
   }
 
   const handleSendMessage = async (content) => {
-    if (!selectedId) return
+    if (!selectedId || !selectedConversation) return
 
     play('pop')
-    const { data } = await post(ENDPOINTS.MESSAGES(selectedId), { content })
+    const recipientId = selectedConversation.otherParticipant?._id
+    const { data } = await post(ENDPOINTS.SEND_MESSAGE, {
+      recipientId,
+      content
+    })
     if (data) {
       play('success')
-      setMessages(prev => [...prev, data])
+      const msg = data.data?.message || data.message || data.data || data
+      setMessages(prev => [...prev, msg])
     }
   }
 
@@ -74,7 +81,7 @@ export default function Messages() {
     setSelectedId(null)
   }
 
-  const selectedConversation = conversations.find(c => c.id === selectedId)
+  const selectedConversation = conversations.find(c => (c._id || c.id) === selectedId)
 
   return (
     <Layout>

@@ -36,6 +36,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { path: '/messages', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', label: t('nav.messages'), auth: true },
     { path: '/my-posts', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', label: t('nav.myPosts'), auth: true },
     { path: '/profile', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', label: t('nav.profile'), auth: true },
+    { path: '/subscription', icon: 'M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z', label: t('nav.subscription') || 'Subscription', auth: true },
     { path: '/kyc', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', label: t('nav.verification'), auth: true, badge: !isKYCVerified }
   ]
 
@@ -73,15 +74,15 @@ export default function Sidebar({ isOpen, onClose }) {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center ring-2 ring-primary/30">
-                  {profile?.avatar ? (
+                  {profile?.avatarUrl ? (
                     <img
-                      src={profile.avatar}
-                      alt={profile?.name}
+                      src={profile.avatarUrl}
+                      alt={profile?.displayName}
                       className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
                     <span className="text-primary font-bold text-lg">
-                      {profile?.name?.[0]?.toUpperCase() || 'U'}
+                      {profile?.displayName?.[0]?.toUpperCase() || 'U'}
                     </span>
                   )}
                 </div>
@@ -95,9 +96,9 @@ export default function Sidebar({ isOpen, onClose }) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-text-primary truncate">
-                  {profile?.name || t('common.user')}
+                  {profile?.displayName || t('common.user')}
                 </p>
-                <p className="text-xs text-text-secondary truncate">{profile?.phone}</p>
+                <p className="text-xs text-text-secondary truncate">{profile?.email}</p>
               </div>
             </div>
           </div>

@@ -28,21 +28,14 @@
     "profile": "Profil",
     "myPosts": "E'lonlarim",
     "verification": "Tekshiruv",
+    "subscription": "Obuna",
     "login": "Kirish",
     "logout": "Chiqish"
   },
   "auth": {
     "login": "Kirish",
-    "loginDesc": "Davom etish uchun telefon raqamingizni kiriting",
-    "phoneNumber": "Telefon raqami",
-    "sendCode": "Kod yuborish",
-    "verifyCode": "Kodni tasdiqlash",
-    "verifyDesc": "Telefoningizga yuborilgan 6 xonali kodni kiriting",
-    "codeSentTo": "Kod yuborildi",
-    "verify": "Tasdiqlash",
-    "resendCode": "Qayta yuborish",
-    "resendIn": "Qayta yuborish",
-    "changePhone": "Raqamni o'zgartirish",
+    "loginDesc": "Davom etish uchun Google hisobingiz bilan kiring",
+    "googleAuthFailed": "Google autentifikatsiya xatosi. Qayta urinib ko'ring",
     "termsAgree": "Davom etish orqali siz Foydalanish shartlari va Maxfiylik siyosatiga rozilik bildirasiz"
   },
   "home": {
@@ -337,7 +330,7 @@
     "noRecentUsers": "Yangi foydalanuvchilar yo'q",
     "noRecentPosts": "Yangi e'lonlar yo'q",
     "user": "Foydalanuvchi",
-    "phone": "Telefon",
+    "email": "Email",
     "kycStatus": "KYC holati",
     "joined": "Qo'shilgan",
     "noUsers": "Foydalanuvchilar topilmadi",
@@ -386,8 +379,7 @@
   },
   "validation": {
     "required": "Bu maydon talab qilinadi",
-    "invalidEmail": "Noto'g'ri email manzil",
-    "invalidPhone": "Noto'g'ri telefon raqami"
+    "invalidEmail": "Noto'g'ri email manzil"
   },
   "card": {
     "viewDetails": "Batafsil ko'rish"

@@ -17,9 +17,9 @@ export default function Dashboard() {
         const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_STATS}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
-        const data = await response.json()
+        const result = await response.json().catch(() => ({}))
         if (response.ok) {
-          setStats(data)
+          setStats(result.data?.stats || result.data || result)
         }
       } catch {
         // Stats fetch failed silently
@@ -44,31 +44,31 @@ export default function Dashboard() {
   const statCards = [
     {
       title: t('admin.totalUsers'),
-      value: stats?.total_users || 0,
+      value: stats?.users?.total || 0,
       icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
       color: 'blue',
-      trend: '+12%'
+      trend: null
     },
     {
       title: t('admin.totalPosts'),
-      value: stats?.total_posts || 0,
+      value: stats?.posts?.total || 0,
       icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
       color: 'green',
-      trend: '+8%'
+      trend: null
     },
     {
       title: t('admin.pendingKyc'),
-      value: stats?.pending_kyc || 0,
+      value: stats?.users?.pendingKyc || 0,
       icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
       color: 'warning',
       trend: null
     },
     {
       title: t('admin.activePosts'),
-      value: stats?.active_posts || 0,
+      value: stats?.posts?.active || 0,
       icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
       color: 'primary',
-      trend: '+24%'
+      trend: null
     }
   ]
 
@@ -132,26 +132,26 @@ export default function Dashboard() {
             <button className="text-sm text-primary hover:underline">View All</button>
           </div>
 
-          {stats?.recent_users?.length > 0 ? (
+          {stats?.recentUsers?.length > 0 ? (
             <div className="space-y-3">
-              {stats.recent_users.map((user, i) => (
+              {stats.recentUsers.map((user, i) => (
                 <div
-                  key={user.id}
+                  key={user._id}
                   className="flex items-center gap-3 p-3 bg-surface-hover rounded-xl hover:bg-primary/5 transition-colors"
                   style={{ animationDelay: `${(i + 5) * 50}ms` }}
                 >
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center ring-2 ring-primary/30">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt="" className="w-full h-full rounded-full object-cover" />
+                    {user.avatarUrl ? (
+                      <img src={user.avatarUrl} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
                       <span className="text-primary font-bold">
-                        {user.name?.[0]?.toUpperCase() || 'U'}
+                        {user.displayName?.[0]?.toUpperCase() || 'U'}
                       </span>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-text-primary font-medium truncate">{user.name || t('common.user')}</p>
-                    <p className="text-text-secondary text-sm truncate">{user.phone}</p>
+                    <p className="text-text-primary font-medium truncate">{user.displayName || t('common.user')}</p>
+                    <p className="text-text-secondary text-sm truncate">{user.email}</p>
                   </div>
                   <div className="text-xs text-text-secondary">
                     {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}
@@ -181,11 +181,11 @@ export default function Dashboard() {
             <button className="text-sm text-primary hover:underline">View All</button>
           </div>
 
-          {stats?.recent_posts?.length > 0 ? (
+          {stats?.recentPosts?.length > 0 ? (
             <div className="space-y-3">
-              {stats.recent_posts.map((post, i) => (
+              {stats.recentPosts.map((post, i) => (
                 <div
-                  key={post.id}
+                  key={post._id}
                   className="flex items-center gap-3 p-3 bg-surface-hover rounded-xl hover:bg-primary/5 transition-colors"
                   style={{ animationDelay: `${(i + 5) * 50}ms` }}
                 >

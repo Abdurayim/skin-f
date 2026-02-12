@@ -16,15 +16,15 @@ export default function ProfileCard({ profile }) {
     <div className="bg-surface border border-border rounded-xl p-6">
       <div className="flex items-start gap-4">
         <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-          {profile.avatar ? (
+          {profile.avatarUrl ? (
             <img
-              src={profile.avatar}
-              alt={profile.name}
+              src={profile.avatarUrl}
+              alt={profile.displayName}
               className="w-full h-full rounded-full object-cover"
             />
           ) : (
             <span className="text-3xl font-bold text-white">
-              {profile.name?.[0]?.toUpperCase() || 'U'}
+              {profile.displayName?.[0]?.toUpperCase() || 'U'}
             </span>
           )}
         </div>
@@ -32,18 +32,14 @@ export default function ProfileCard({ profile }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h2 className="text-xl font-semibold text-text-primary">
-              {profile.name || t('common.user')}
+              {profile.displayName || t('common.user')}
             </h2>
             <Badge variant={kycStatusVariants[profile.kycStatus || 'not_submitted']}>
               {t(`kyc.status.${profile.kycStatus || 'not_submitted'}`)}
             </Badge>
           </div>
 
-          <p className="text-text-secondary mt-1">{profile.phone}</p>
-
-          {profile.email && (
-            <p className="text-text-secondary text-sm mt-1">{profile.email}</p>
-          )}
+          <p className="text-text-secondary mt-1">{profile.email}</p>
 
           <p className="text-text-secondary text-sm mt-2">
             {t('profile.memberSince')} {formatDate(profile.createdAt)}

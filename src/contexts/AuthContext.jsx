@@ -1,9 +1,37 @@
 import { createContext, useState, useEffect, useCallback } from 'react'
-import { auth, sendOTP, verifyOTP, getIdToken } from '../config/firebase'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { API_BASE_URL, ENDPOINTS } from '../config/api'
 
 export const AuthContext = createContext(null)
+
+async function tryRefreshToken() {
+  const refreshToken = localStorage.getItem('refreshToken')
+  if (!refreshToken) return false
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_REFRESH_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken })
+    })
+
+    const result = await response.json().catch(() => null)
+
+    if (response.ok && result?.data?.tokens) {
+      localStorage.setItem('accessToken', result.data.tokens.accessToken)
+      localStorage.setItem('refreshToken', result.data.tokens.refreshToken)
+      return true
+    }
+  } catch {
+    // Refresh request failed
+  }
+
+  return false
+}
+
+function clearAuthTokens() {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('refreshToken')
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -11,96 +39,92 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const fetchProfile = useCallback(async () => {
-    try {
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) return null
+  const fetchProfile = useCallback(async (isRetry = false) => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) return null
 
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.USER_PROFILE}`, {
+    try {
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_ME}`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         }
       })
+
       if (response.ok) {
-        const result = await response.json()
+        const result = await response.json().catch(() => ({}))
         // Backend returns { success, message, data: { user: {...} } }
         const userData = result.data?.user || result.data || result
         setProfile(userData)
+        setUser(userData)
         return userData
       }
+
+      // On 401, attempt token refresh once
+      if (response.status === 401 && !isRetry) {
+        const refreshed = await tryRefreshToken()
+        if (refreshed) {
+          return fetchProfile(true)
+        }
+      }
+
+      // Auth failed — clear stale tokens
+      clearAuthTokens()
+      setUser(null)
+      setProfile(null)
     } catch {
-      // Profile fetch failed silently
+      // Network error — don't clear tokens (might be temporary)
     }
+
     return null
   }, [])
 
+  // On mount: check if we already have a valid token stored
   useEffect(() => {
-    if (!auth) {
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      fetchProfile().finally(() => setLoading(false))
+    } else {
       setLoading(false)
-      return
     }
-
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser)
-        await fetchProfile()
-      } else {
-        setUser(null)
-        setProfile(null)
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-      }
-      setLoading(false)
-    })
-
-    return () => unsubscribe()
   }, [fetchProfile])
 
-  const requestOTP = async (phoneNumber) => {
+  /**
+   * Google OAuth login — sends ID token to backend
+   * @param {string} credential - Google ID token from GoogleLogin component
+   * @returns {{ success: boolean, isNewUser?: boolean, error?: string }}
+   */
+  const loginWithGoogle = async (credential) => {
     setError(null)
     try {
-      await sendOTP(phoneNumber)
-      return true
-    } catch (err) {
-      setError(err.message)
-      return false
-    }
-  }
-
-  const confirmOTP = async (otp) => {
-    setError(null)
-    try {
-      const firebaseUser = await verifyOTP(otp)
-      const firebaseToken = await firebaseUser.getIdToken()
-
-      // Register/login with backend using verify-token endpoint
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_VERIFY_TOKEN}`, {
+      const lang = localStorage.getItem('skintrader_language') || 'en'
+      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_GOOGLE}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept-Language': lang
         },
-        body: JSON.stringify({
-          firebaseToken: firebaseToken
-        })
+        body: JSON.stringify({ idToken: credential })
       })
 
-      if (response.ok) {
-        const result = await response.json()
-        const userData = result.data.user
-        const tokens = result.data.tokens
+      const result = await response.json().catch(() => ({}))
 
-        // Store tokens
+      if (response.ok) {
+        const userData = result.data?.user || result.data
+        const tokens = result.data?.tokens || result.tokens
+
+        // Store JWT tokens
         localStorage.setItem('accessToken', tokens.accessToken)
         localStorage.setItem('refreshToken', tokens.refreshToken)
 
+        setUser(userData)
         setProfile(userData)
+
         return { success: true, isNewUser: userData.isNewUser }
-      } else {
-        const errorData = await response.json().catch(() => null)
-        const errorMessage = errorData?.message || errorData?.error || `Backend returned ${response.status}`
-        throw new Error(errorMessage)
       }
+
+      setError(result.message || 'Google authentication failed')
+      return { success: false, error: result.message || 'Google authentication failed' }
     } catch (err) {
       setError(err.message)
       return { success: false, error: err.message }
@@ -114,18 +138,18 @@ export function AuthProvider({ children }) {
         await fetch(`${API_BASE_URL}${ENDPOINTS.AUTH_LOGOUT}`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            refreshToken: localStorage.getItem('refreshToken')
+          })
         })
       }
     } catch {
       // Logout API call failed, continue with local cleanup
     } finally {
-      if (auth) {
-        await signOut(auth)
-      }
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
+      clearAuthTokens()
       setUser(null)
       setProfile(null)
     }
@@ -142,11 +166,9 @@ export function AuthProvider({ children }) {
     error,
     isAuthenticated: !!user,
     isKYCVerified: profile?.kycStatus === 'verified',
-    requestOTP,
-    confirmOTP,
+    loginWithGoogle,
     logout,
-    refreshProfile,
-    getIdToken
+    refreshProfile
   }
 
   return (
