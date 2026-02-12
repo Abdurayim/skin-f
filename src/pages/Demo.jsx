@@ -311,7 +311,7 @@ export default function Demo() {
                   className="w-full h-full"
                   controls
                 >
-                  <source src="/videos/tanishturuv.mp4" type="video/mp4" />
+                  <source src="https://pub-9642d4543fc44e478f9bda0ebefa61b0.r2.dev/tanishturuv.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -333,7 +333,7 @@ export default function Demo() {
                   className="w-full h-full"
                   controls
                 >
-                  <source src="/videos/instruction.MP4" type="video/mp4" />
+                  <source src="https://pub-9642d4543fc44e478f9bda0ebefa61b0.r2.dev/instruction.MP4" type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
