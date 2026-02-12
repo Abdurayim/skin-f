@@ -32,6 +32,8 @@ export default function Sidebar({ isOpen, onClose }) {
   const isActive = (path) => location.pathname === path
 
   const navItems = [
+    { path: '/demo', icon: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', label: 'Demo', auth: false, highlight: true },
+    { path: '/posts', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', label: t('nav.browse') || 'Browse', auth: false },
     { path: '/create-post', icon: 'M12 4v16m8-8H4', label: t('nav.sell'), auth: true },
     { path: '/messages', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', label: t('nav.messages'), auth: true },
     { path: '/my-posts', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', label: t('nav.myPosts'), auth: true },
@@ -46,12 +48,12 @@ export default function Sidebar({ isOpen, onClose }) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 md:hidden animate-fade-in"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 lg:hidden animate-fade-in"
         onClick={handleClose}
       />
 
       {/* Sidebar Panel */}
-      <div className="fixed inset-y-0 right-0 w-72 bg-surface border-l border-border z-50 md:hidden animate-fade-in-right flex flex-col">
+      <div className="fixed inset-y-0 right-0 w-72 bg-surface border-l border-border z-50 lg:hidden animate-fade-in-right flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <span className="text-text-primary font-bold flex items-center gap-2">
@@ -117,7 +119,9 @@ export default function Sidebar({ isOpen, onClose }) {
                   animate-fade-in-right
                   ${isActive(item.path)
                     ? 'bg-primary/10 text-primary'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+                    : item.highlight
+                      ? 'text-primary bg-primary/5 border border-primary/20 hover:bg-primary/10'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                   }
                 `}
                 style={{ animationDelay: `${index * 50}ms` }}
