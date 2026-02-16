@@ -27,10 +27,12 @@ export default function Home() {
       ])
 
       if (postsRes.data) {
-        setFeaturedPosts(postsRes.data.posts || postsRes.data)
+        const postsList = postsRes.data.posts || postsRes.data.data?.posts || postsRes.data.data || []
+        setFeaturedPosts(Array.isArray(postsList) ? postsList : [])
       }
       if (gamesRes.data) {
-        setGames(gamesRes.data)
+        const gamesList = gamesRes.data.data?.games || gamesRes.data.data || gamesRes.data.games || []
+        setGames(Array.isArray(gamesList) ? gamesList : [])
       }
       setLoading(false)
     }

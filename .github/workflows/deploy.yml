@@ -36,6 +36,17 @@ jobs:
           VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
           VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
 
+      - name: Verify Build Output
+        run: |
+          echo "Checking build output..."
+          ls -la dist/
+          echo "Verifying critical files exist..."
+          test -f dist/index.html || (echo "❌ index.html missing" && exit 1)
+          test -f dist/_redirects || (echo "❌ _redirects missing" && exit 1)
+          test -f dist/.htaccess || (echo "❌ .htaccess missing" && exit 1)
+          test -f dist/404.html || (echo "❌ 404.html missing" && exit 1)
+          echo "✅ All critical files present"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 

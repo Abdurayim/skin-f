@@ -60,6 +60,13 @@ export default function Messages() {
     setSelectedId(id)
   }
 
+  const handleBack = () => {
+    play('whoosh')
+    setSelectedId(null)
+  }
+
+  const selectedConversation = conversations.find(c => (c._id || c.id) === selectedId)
+
   const handleSendMessage = async (content) => {
     if (!selectedId || !selectedConversation) return
 
@@ -75,13 +82,6 @@ export default function Messages() {
       setMessages(prev => [...prev, msg])
     }
   }
-
-  const handleBack = () => {
-    play('whoosh')
-    setSelectedId(null)
-  }
-
-  const selectedConversation = conversations.find(c => (c._id || c.id) === selectedId)
 
   return (
     <Layout>

@@ -25,8 +25,8 @@ export default function MyPosts() {
       const { data, error: apiError } = await get(`${ENDPOINTS.MY_POSTS}?status=${activeTab}`)
       if (data) {
         // Backend returns: { data: { posts: [...] } } or { data: [...] }
-        const posts = data.posts || data.data?.posts || data.data || []
-        setPosts(posts)
+        const postsList = data.posts || data.data?.posts || data.data || []
+        setPosts(Array.isArray(postsList) ? postsList : [])
       } else {
         setPosts([])
       }

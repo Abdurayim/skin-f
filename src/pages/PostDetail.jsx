@@ -65,6 +65,7 @@ export default function PostDetail() {
   }
 
   const navigateImage = (direction) => {
+    if (!postData?.images?.length) return
     play('slide')
     const newIndex = direction === 'next'
       ? (selectedImage + 1) % postData.images.length
@@ -156,7 +157,7 @@ export default function PostDetail() {
                     )}
                   </div>
                   {/* Thumbnails */}
-                  {postData.images.length > 1 && (
+                  {postData.images?.length > 1 && (
                     <div className="p-3 sm:p-4 flex gap-2 overflow-x-auto scrollbar-hide">
                       {postData.images.map((image, index) => (
                         <button
@@ -201,9 +202,9 @@ export default function PostDetail() {
                 <Badge variant={typeVariants[postData.type] || 'default'} glow>
                   {t(`post.types.${postData.type}`)}
                 </Badge>
-                {(postData.game || postData.gameId) && (
+                {(postData.game?.name || postData.gameId?.name) && (
                   <Badge variant="default">
-                    {(postData.game || postData.gameId).name}
+                    {postData.game?.name || postData.gameId?.name}
                   </Badge>
                 )}
                 {postData.status === 'sold' && (
@@ -360,7 +361,7 @@ export default function PostDetail() {
           </button>
 
           {/* Navigation arrows */}
-          {postData.images.length > 1 && (
+          {postData.images?.length > 1 && (
             <>
               <button
                 className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-10"
@@ -401,8 +402,9 @@ export default function PostDetail() {
           </div>
 
           {/* Thumbnail strip */}
-          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 max-w-[90vw] overflow-x-auto p-2">
-            {postData.images.map((image, index) => (
+          {postData.images?.length > 0 && (
+            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2 max-w-[90vw] overflow-x-auto p-2">
+              {postData.images.map((image, index) => (
               <button
                 key={index}
                 onClick={(e) => {
@@ -420,7 +422,8 @@ export default function PostDetail() {
                 <img src={getImageUrl(image?.thumbnailPath || image?.originalPath || image)} alt="" className="w-full h-full object-cover" />
               </button>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </Layout>

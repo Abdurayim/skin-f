@@ -13,7 +13,9 @@ export default function GameSelector({ value, onChange, error }) {
     const fetchGames = async () => {
       const { data, error: apiError } = await get(ENDPOINTS.GAMES)
       if (data) {
-        setGames(data)
+        // Backend returns: { data: { games: [...] } } or { data: [...] }
+        const gamesList = data.data?.games || data.data || data.games || []
+        setGames(Array.isArray(gamesList) ? gamesList : [])
       }
     }
     fetchGames()

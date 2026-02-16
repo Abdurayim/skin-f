@@ -24,7 +24,7 @@ export default function EditPost() {
       const { data, error: apiError } = await get(ENDPOINTS.POST_BY_ID(id))
       if (data) {
         // Backend may return { data: { post: {...} } } or { data: {...} }
-        const post = data.post || data
+        const post = data.data?.post || data.post || data.data || data
         setPostData({
           title: post.title,
           description: post.description,
