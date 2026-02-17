@@ -78,8 +78,8 @@ export default function PostFilters({ filters, onChange, onReset }) {
           {t('filters.game')}
         </label>
         <select
-          value={filters.game_id || ''}
-          onChange={(e) => handleChange('game_id', e.target.value)}
+          value={filters.gameId || ''}
+          onChange={(e) => handleChange('gameId', e.target.value)}
           className="w-full px-4 py-3 rounded-xl bg-surface-light border border-border text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 appearance-none cursor-pointer"
           onFocus={() => play('hover')}
         >
@@ -125,14 +125,14 @@ export default function PostFilters({ filters, onChange, onReset }) {
           <Input
             type="number"
             placeholder="Min"
-            value={filters.min_price || ''}
-            onChange={(e) => handleChange('min_price', e.target.value)}
+            value={filters.minPrice || ''}
+            onChange={(e) => handleChange('minPrice', e.target.value)}
           />
           <Input
             type="number"
             placeholder="Max"
-            value={filters.max_price || ''}
-            onChange={(e) => handleChange('max_price', e.target.value)}
+            value={filters.maxPrice || ''}
+            onChange={(e) => handleChange('maxPrice', e.target.value)}
           />
         </div>
       </div>

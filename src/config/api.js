@@ -59,6 +59,7 @@ export const ENDPOINTS = {
   ADMIN_KYC_PENDING: '/v1/admin/kyc/pending',
   ADMIN_KYC_APPROVE: (id) => `/v1/admin/kyc/${id}/approve`,
   ADMIN_KYC_REJECT: (id) => `/v1/admin/kyc/${id}/reject`,
+  ADMIN_KYC_IMAGE: (filename) => `/v1/admin/kyc/image/${filename}`,
   ADMIN_POSTS: '/v1/admin/posts',
   ADMIN_POST_DELETE: (id) => `/v1/admin/posts/${id}`,
   ADMIN_STATS: '/v1/admin/stats',

@@ -17,44 +17,61 @@ export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [posts, setPosts] = useState([])
-  const [page, setPage] = useState(1)
+  const [nextCursor, setNextCursor] = useState(null)
   const [hasMore, setHasMore] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
 
   const [filters, setFilters] = useState({
     search: searchParams.get('search') || '',
-    game_id: searchParams.get('game_id') || '',
+    gameId: searchParams.get('gameId') || '',
     type: searchParams.get('type') || '',
-    min_price: searchParams.get('min_price') || '',
-    max_price: searchParams.get('max_price') || '',
+    minPrice: searchParams.get('minPrice') || '',
+    maxPrice: searchParams.get('maxPrice') || '',
     sort: searchParams.get('sort') || 'newest'
   })
 
-  const fetchPosts = useCallback(async (pageNum = 1, append = false) => {
+  const fetchPosts = useCallback(async (cursor = null, append = false) => {
     const params = new URLSearchParams()
-    params.append('page', pageNum.toString())
     params.append('limit', '12')
+    if (cursor) params.append('cursor', cursor)
 
-    Object.entries(filters).forEach(([key, value]) => {
+    // Map frontend filter names to backend query params
+    const { search, sort, ...rest } = filters
+    Object.entries(rest).forEach(([key, value]) => {
       if (value) params.append(key, value)
     })
+    if (search) params.append('q', search)
+    if (sort) {
+      const sortMap = {
+        newest: { sortBy: 'createdAt', sortOrder: 'desc' },
+        oldest: { sortBy: 'createdAt', sortOrder: 'asc' },
+        price_asc: { sortBy: 'price', sortOrder: 'asc' },
+        price_desc: { sortBy: 'price', sortOrder: 'desc' }
+      }
+      const { sortBy, sortOrder } = sortMap[sort] || sortMap.newest
+      params.append('sortBy', sortBy)
+      params.append('sortOrder', sortOrder)
+    }
 
     const { data } = await get(`${ENDPOINTS.POSTS}?${params.toString()}`)
 
     if (data) {
-      const newPosts = data.data?.posts || data.posts || []
+      const responseData = data.data || data
+      const newPosts = responseData.posts || []
+      const pagination = responseData.pagination || {}
       if (append) {
         setPosts(prev => [...prev, ...newPosts])
       } else {
         setPosts(newPosts)
       }
-      setHasMore(newPosts.length === 12)
+      setNextCursor(pagination.nextCursor || null)
+      setHasMore(pagination.hasMore ?? newPosts.length === 12)
     }
   }, [filters])
 
   useEffect(() => {
-    setPage(1)
-    fetchPosts(1, false)
+    setNextCursor(null)
+    fetchPosts(null, false)
 
     const params = new URLSearchParams()
     Object.entries(filters).forEach(([key, value]) => {
@@ -65,9 +82,7 @@ export default function Posts() {
 
   const handleLoadMore = () => {
     play('click')
-    const nextPage = page + 1
-    setPage(nextPage)
-    fetchPosts(nextPage, true)
+    fetchPosts(nextCursor, true)
   }
 
   const handleFilterChange = (newFilters) => {
@@ -79,10 +94,10 @@ export default function Posts() {
     play('whoosh')
     setFilters({
       search: '',
-      game_id: '',
+      gameId: '',
       type: '',
-      min_price: '',
-      max_price: '',
+      minPrice: '',
+      maxPrice: '',
       sort: 'newest'
     })
   }

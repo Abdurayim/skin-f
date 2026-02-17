@@ -14,7 +14,13 @@ export default function SelfieCapture({ value, onChange, error }) {
 
     setFileError('')
 
-    if (!file.type.startsWith('image/')) {
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif']
+    const ext = file.name.toLowerCase().slice(file.name.lastIndexOf('.'))
+    const isImageMime = file.type.startsWith('image/')
+    const isAllowedExt = allowedExtensions.includes(ext)
+
+    // Some browsers report empty MIME or application/octet-stream for HEIC
+    if (!isImageMime && !isAllowedExt) {
       setFileError('Please upload an image file (JPG, PNG, HEIC, etc.)')
       if (inputRef.current) inputRef.current.value = ''
       return

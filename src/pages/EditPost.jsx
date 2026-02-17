@@ -31,7 +31,7 @@ export default function EditPost() {
           price: post.price,
           currency: post.currency,
           type: post.type,
-          game_id: post.game_id || post.game?._id || post.game?.id || post.gameId,
+          gameId: post.gameId || post.game?._id || post.game?.id,
           images: post.images?.map(url => ({ url, preview: url })) || []
         })
       }
@@ -48,7 +48,7 @@ export default function EditPost() {
       submitData.append('price', formData.price)
       submitData.append('currency', formData.currency)
       submitData.append('type', formData.type)
-      submitData.append('game_id', formData.game_id)
+      submitData.append('gameId', formData.gameId)
 
       formData.images.forEach((image) => {
         if (image.file) {

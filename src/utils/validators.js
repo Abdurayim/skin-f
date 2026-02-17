@@ -28,8 +28,8 @@ export function validatePost(data) {
     errors.description = 'Description must be less than 2000 characters'
   }
 
-  if (!data.game_id) {
-    errors.game_id = 'Please select a game'
+  if (!data.gameId) {
+    errors.gameId = 'Please select a game'
   }
 
   if (!data.price || parseFloat(data.price) <= 0) {

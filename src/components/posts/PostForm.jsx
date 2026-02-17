@@ -16,7 +16,7 @@ export default function PostForm({ initialData, onSubmit, loading }) {
     price: '',
     currency: 'USD',
     type: 'skin',
-    game_id: '',
+    gameId: '',
     images: [],
     ...initialData
   })
@@ -94,9 +94,9 @@ export default function PostForm({ initialData, onSubmit, loading }) {
 
       {/* Game Selector */}
       <GameSelector
-        value={formData.game_id}
-        onChange={(value) => handleChange('game_id', value)}
-        error={errors.game_id}
+        value={formData.gameId}
+        onChange={(value) => handleChange('gameId', value)}
+        error={errors.gameId}
       />
 
       {/* Post Type */}

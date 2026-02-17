@@ -23,10 +23,13 @@ export default function KYC() {
   const [document, setDocument] = useState(null)
   const [selfie, setSelfie] = useState(null)
   const [errors, setErrors] = useState({})
+  const [submitStep, setSubmitStep] = useState(null) // 'uploading_id' | 'uploading_selfie' | 'verifying'
 
   const kycStatus = profile?.kycStatus || 'not_submitted'
 
   const handleSubmit = async () => {
+    setErrors({})
+
     const newErrors = {}
     if (!document) newErrors.document = t('validation.required')
     if (!selfie) newErrors.selfie = t('validation.required')
@@ -46,47 +49,64 @@ export default function KYC() {
 
     try {
       // Upload ID document
+      setSubmitStep('uploading_id')
       const docFormData = new FormData()
       docFormData.append('document', document)
       docFormData.append('documentType', 'id_card')
 
       const { data: docData, error: docError } = await post(ENDPOINTS.KYC_UPLOAD, docFormData)
 
-      if (!docData || docError) {
-        setErrors({ submit: docError || 'Failed to upload ID document' })
+      if (!docData?.success || docError) {
+        setErrors({ submit: docError || docData?.message || 'Failed to upload ID document' })
         play('error')
+        setSubmitStep(null)
         return
       }
 
       // Upload selfie
+      setSubmitStep('uploading_selfie')
       const selfieFormData = new FormData()
       selfieFormData.append('document', selfie)
       selfieFormData.append('documentType', 'selfie')
 
       const { data: selfieData, error: selfieError } = await post(ENDPOINTS.KYC_UPLOAD, selfieFormData)
 
-      if (!selfieData || selfieError) {
-        setErrors({ submit: selfieError || 'Failed to upload selfie' })
+      if (!selfieData?.success || selfieError) {
+        setErrors({ submit: selfieError || selfieData?.message || 'Failed to upload selfie' })
         play('error')
+        setSubmitStep(null)
         return
       }
 
       // Trigger KYC verification
+      setSubmitStep('verifying')
       const { data: verifyData, error: verifyError } = await post(ENDPOINTS.KYC_VERIFY, {})
 
-      if (verifyData) {
+      if (verifyError || !verifyData?.success) {
+        setErrors({ submit: verifyError || verifyData?.message || 'Verification failed' })
+        play('error')
+        setSubmitStep(null)
+        return
+      }
+
+      // Check if auto-verified or pending manual review
+      if (verifyData.data?.verified) {
         play('success')
         await refreshProfile()
         const redirectTo = sessionStorage.getItem('kyc_return_path') || '/create-post'
         sessionStorage.removeItem('kyc_return_path')
         navigate(redirectTo)
       } else {
-        setErrors({ submit: verifyError || 'Verification failed' })
-        play('error')
+        // Face comparison failed — pending manual review
+        play('success')
+        await refreshProfile()
+        // Component will re-render to show "pending" screen
       }
     } catch (err) {
       setErrors({ submit: err.message || 'An unexpected error occurred' })
       play('error')
+    } finally {
+      setSubmitStep(null)
     }
   }
 
@@ -208,8 +228,8 @@ export default function KYC() {
           />
         )}
 
-        {(error || errors.submit) && (
-          <Alert type="error" message={error || errors.submit} className="mb-6 animate-fade-in" />
+        {errors.submit && (
+          <Alert type="error" message={errors.submit} className="mb-6 animate-fade-in" />
         )}
 
         {/* Step Indicator */}
@@ -393,13 +413,18 @@ export default function KYC() {
                   fullWidth
                   glow
                   size="lg"
-                  loading={loading}
+                  loading={loading || !!submitStep}
                   onClick={handleSubmit}
                 >
-                  {t('kyc.submit')}
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  {submitStep === 'uploading_id' ? 'Uploading ID...'
+                    : submitStep === 'uploading_selfie' ? 'Uploading Selfie...'
+                    : submitStep === 'verifying' ? 'Verifying...'
+                    : t('kyc.submit')}
+                  {!submitStep && (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
                 </Button>
               </div>
             </div>

@@ -6,7 +6,63 @@ import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
 import { formatDate } from '../../utils/formatters'
-import { getImageUrl } from '../../config/api'
+
+/**
+ * Component that fetches a KYC image via the authenticated admin endpoint
+ * and displays it as a blob URL.
+ */
+function AuthenticatedImage({ filePath, alt, className }) {
+  const [src, setSrc] = useState(null)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    if (!filePath) return
+
+    let objectUrl = null
+    const fetchImage = async () => {
+      try {
+        const filename = filePath.split('/').pop()
+        const token = localStorage.getItem('admin_token')
+        const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_IMAGE(filename)}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        if (!response.ok) {
+          setError(true)
+          return
+        }
+        const blob = await response.blob()
+        objectUrl = URL.createObjectURL(blob)
+        setSrc(objectUrl)
+      } catch {
+        setError(true)
+      }
+    }
+
+    fetchImage()
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [filePath])
+
+  if (error || !filePath) {
+    return (
+      <div className={`flex items-center justify-center bg-surface-hover text-text-secondary text-sm ${className}`}>
+        Failed to load image
+      </div>
+    )
+  }
+
+  if (!src) {
+    return (
+      <div className={`flex items-center justify-center bg-surface-hover ${className}`}>
+        <Loader size="sm" />
+      </div>
+    )
+  }
+
+  return <img src={src} alt={alt} className={className} />
+}
 
 export default function KYCReview() {
   const { t } = useLanguage()
@@ -182,8 +238,8 @@ export default function KYCReview() {
                 {(() => {
                   const doc = selectedKyc.kycDocuments?.find(d => d.type === 'id_card' || d.type === 'passport')
                   return doc ? (
-                    <img
-                      src={getImageUrl(doc.filePath)}
+                    <AuthenticatedImage
+                      filePath={doc.filePath}
                       alt="Document"
                       className="w-full rounded-lg border border-border"
                     />
@@ -201,8 +257,8 @@ export default function KYCReview() {
                 {(() => {
                   const selfie = selectedKyc.kycDocuments?.find(d => d.type === 'selfie')
                   return selfie ? (
-                    <img
-                      src={getImageUrl(selfie.filePath)}
+                    <AuthenticatedImage
+                      filePath={selfie.filePath}
                       alt="Selfie"
                       className="w-full rounded-lg border border-border"
                     />

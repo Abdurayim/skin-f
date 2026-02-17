@@ -64,25 +64,25 @@ export default function Home() {
       title: t('home.hero.slide4.title'),
       subtitle: t('home.hero.slide4.subtitle'),
       image: "https://cdn.akamai.steamstatic.com/steam/apps/252490/header.jpg?t=1671558902",
-      cta: t('home.hero.slide1.cta')
+      cta: t('home.hero.slide4.cta')
     },
     {
       title: t('home.hero.slide5.title'),
       subtitle: t('home.hero.slide5.subtitle'),
       image: "https://cdn.akamai.steamstatic.com/steam/apps/440/header.jpg?t=1666823513",
-      cta: t('home.hero.slide1.cta')
+      cta: t('home.hero.slide5.cta')
     },
     {
       title: t('home.hero.slide6.title'),
       subtitle: t('home.hero.slide6.subtitle'),
       image: "https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg?t=1671485009",
-      cta: t('home.hero.slide1.cta')
+      cta: t('home.hero.slide6.cta')
     },
     {
       title: t('home.hero.slide7.title'),
       subtitle: t('home.hero.slide7.subtitle'),
       image: "https://cdn.akamai.steamstatic.com/steam/apps/346110/header.jpg?t=1671123569",
-      cta: t('home.hero.slide1.cta')
+      cta: t('home.hero.slide7.cta')
     }
   ]
 
@@ -203,7 +203,7 @@ export default function Home() {
           {(games.length > 0 ? games : defaultGames).map((game, index) => (
             <Link
               key={game._id || game.id || index}
-              to={`/posts?game_id=${game._id || game.id}`}
+              to={`/posts?gameId=${game._id || game.id}`}
               className="group block animate-fade-in-up opacity-0"
               style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
               onMouseEnter={() => play('hover')}

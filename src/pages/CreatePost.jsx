@@ -26,7 +26,7 @@ export default function CreatePost() {
       submitData.append('price', formData.price)
       submitData.append('currency', formData.currency)
       submitData.append('type', formData.type)
-      submitData.append('game_id', formData.game_id)
+      submitData.append('gameId', formData.gameId)
 
       formData.images.forEach((image) => {
         if (image.file) {
