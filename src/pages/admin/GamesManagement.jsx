@@ -15,6 +15,8 @@ export default function GamesManagement() {
   const [editingGame, setEditingGame] = useState(null)
   const [actionLoading, setActionLoading] = useState(false)
   const [form, setForm] = useState({ name: '', icon: '', genres: '', isActive: true })
+  const [formError, setFormError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     fetchGames()
@@ -41,10 +43,12 @@ export default function GamesManagement() {
 
   const handleOpenCreate = () => {
     setForm({ name: '', icon: '', genres: '', isActive: true })
+    setFormError('')
     setShowCreateModal(true)
   }
 
   const handleOpenEdit = (game) => {
+    setFormError('')
     setEditingGame(game)
     setForm({
       name: game.name || '',
@@ -56,6 +60,7 @@ export default function GamesManagement() {
 
   const handleCreate = async () => {
     if (!form.name.trim()) return
+    setFormError('')
     setActionLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
@@ -73,12 +78,17 @@ export default function GamesManagement() {
         },
         body: JSON.stringify(body)
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setShowCreateModal(false)
+        setSuccessMessage(`Game "${form.name.trim()}" created successfully!`)
+        setTimeout(() => setSuccessMessage(''), 4000)
         fetchGames()
+      } else {
+        setFormError(data?.message || `Failed to create game (${response.status})`)
       }
-    } catch {
-      // Create failed silently
+    } catch (err) {
+      setFormError(err.message || 'Network error. Please try again.')
     } finally {
       setActionLoading(false)
     }
@@ -87,6 +97,7 @@ export default function GamesManagement() {
   const handleUpdate = async () => {
     if (!editingGame || !form.name.trim()) return
     const gameId = editingGame._id || editingGame.id
+    setFormError('')
     setActionLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
@@ -104,12 +115,17 @@ export default function GamesManagement() {
         },
         body: JSON.stringify(body)
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setEditingGame(null)
+        setSuccessMessage(`Game "${form.name.trim()}" updated successfully!`)
+        setTimeout(() => setSuccessMessage(''), 4000)
         fetchGames()
+      } else {
+        setFormError(data?.message || `Failed to update game (${response.status})`)
       }
-    } catch {
-      // Update failed silently
+    } catch (err) {
+      setFormError(err.message || 'Network error. Please try again.')
     } finally {
       setActionLoading(false)
     }
@@ -118,10 +134,23 @@ export default function GamesManagement() {
   const renderFormModal = (isEdit) => (
     <Modal
       isOpen={isEdit ? !!editingGame : showCreateModal}
-      onClose={() => isEdit ? setEditingGame(null) : setShowCreateModal(false)}
+      onClose={() => {
+        setFormError('')
+        isEdit ? setEditingGame(null) : setShowCreateModal(false)
+      }}
       title={isEdit ? t('admin.editGame') : t('admin.createGame')}
     >
       <div className="space-y-4">
+        {formError && (
+          <div className="p-3 bg-error/10 border border-error/30 rounded-lg">
+            <p className="text-sm text-error flex items-center gap-2">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {formError}
+            </p>
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-text-primary mb-1.5">
             {t('admin.gameName')} *
@@ -204,6 +233,15 @@ export default function GamesManagement() {
           {t('admin.createGame')}
         </Button>
       </div>
+
+      {successMessage && (
+        <div className="mb-4 p-3 bg-success/10 border border-success/30 rounded-lg flex items-center gap-2">
+          <svg className="w-5 h-5 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <p className="text-sm text-success font-medium">{successMessage}</p>
+        </div>
+      )}
 
       <div className="bg-surface border border-border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">

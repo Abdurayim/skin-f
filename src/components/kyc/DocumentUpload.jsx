@@ -6,16 +6,23 @@ export default function DocumentUpload({ value, onChange, error }) {
   const { t } = useLanguage()
   const inputRef = useRef(null)
   const [preview, setPreview] = useState(null)
+  const [fileError, setFileError] = useState('')
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    setFileError('')
+
     if (!file.type.startsWith('image/')) {
+      setFileError('Please upload an image file (JPG, PNG, HEIC, etc.)')
+      if (inputRef.current) inputRef.current.value = ''
       return
     }
 
     if (file.size > 10 * 1024 * 1024) {
+      setFileError('File is too large. Maximum size is 10MB.')
+      if (inputRef.current) inputRef.current.value = ''
       return
     }
 
@@ -98,7 +105,15 @@ export default function DocumentUpload({ value, onChange, error }) {
         )}
       </div>
 
-      {error && (
+      {fileError && (
+        <p className="text-sm text-error flex items-center gap-1.5 mt-1">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          {fileError}
+        </p>
+      )}
+      {!fileError && error && (
         <p className="text-sm text-error">{error}</p>
       )}
     </div>

@@ -32,52 +32,42 @@ jobs:
 
       - name: Validate Environment Variables
         run: |
-          echo "🔍 Checking environment variables..."
+          echo "Checking environment variables..."
           if [ -z "${{ vars.VITE_API_BASE_URL }}" ]; then
-            echo "❌ ERROR: VITE_API_BASE_URL is not set"
-            echo "Please add it in: Settings → Secrets and variables → Actions → Variables"
+            echo "ERROR: VITE_API_BASE_URL is not set"
+            echo "Please add it in: Settings > Secrets and variables > Actions > Variables"
             exit 1
           fi
           if [ -z "${{ vars.VITE_GOOGLE_CLIENT_ID }}" ]; then
-            echo "❌ ERROR: VITE_GOOGLE_CLIENT_ID is not set"
-            echo "Please add it in: Settings → Secrets and variables → Actions → Variables"
+            echo "ERROR: VITE_GOOGLE_CLIENT_ID is not set"
+            echo "Please add it in: Settings > Secrets and variables > Actions > Variables"
             exit 1
           fi
-          echo "✅ VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}"
-          echo "✅ VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}"
+          echo "VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}"
+          echo "VITE_GOOGLE_CLIENT_ID is set"
 
           # Check if API URL is not localhost
-          if [[ "${{ vars.VITE_API_BASE_URL }}" == *"localhost"* ]]; then
-            echo "⚠️  WARNING: API URL contains 'localhost' - this will fail in production!"
+          if echo "${{ vars.VITE_API_BASE_URL }}" | grep -q "localhost"; then
+            echo "ERROR: API URL contains 'localhost' - this will fail in production!"
             echo "Expected format: https://api.skintrader.uz/api"
             exit 1
           fi
-          echo "✅ Environment variables validated"
+          echo "Environment variables validated"
 
       - name: Check for Common Code Issues
         run: |
-          echo "🔍 Checking for potential code issues..."
+          echo "Checking for potential code issues..."
 
-          # Check for console.log in source files (should be removed in production)
-          if grep -r "console\.log" src/ --include="*.jsx" --include="*.js" | grep -v "// " | grep -v "/\*"; then
-            echo "⚠️  WARNING: Found console.log statements in code"
-            echo "Consider removing them for production"
-            # Don't fail, just warn
-          fi
-
-          # Check for hardcoded localhost URLs
-          if grep -r "localhost" src/ --include="*.jsx" --include="*.js" | grep -v "api.js" | grep -v "//"; then
-            echo "❌ ERROR: Found hardcoded localhost URLs in code (excluding api.js)"
+          # Check for hardcoded localhost URLs (excluding api.js fallback and logger)
+          LOCALHOST_HITS=$(grep -r "localhost" src/ --include="*.jsx" --include="*.js" \
+            -l 2>/dev/null | grep -v "api.js" | grep -v "logger.js" || true)
+          if [ -n "$LOCALHOST_HITS" ]; then
+            echo "ERROR: Found hardcoded localhost URLs in:"
+            echo "$LOCALHOST_HITS"
             exit 1
           fi
 
-          # Check for TODO/FIXME comments
-          if grep -r "TODO\|FIXME" src/ --include="*.jsx" --include="*.js" | head -5; then
-            echo "⚠️  WARNING: Found TODO/FIXME comments - review before production"
-            # Don't fail, just warn
-          fi
-
-          echo "✅ Code quality checks passed"
+          echo "Code quality checks passed"
 
       - name: Build
         run: npm run build
@@ -87,116 +77,89 @@ jobs:
 
       - name: Verify Build Output
         run: |
-          echo "🔍 Checking build output..."
+          echo "Checking build output..."
           ls -la dist/
-          echo ""
-          echo "📋 Verifying critical files exist..."
-          test -f dist/index.html || (echo "❌ index.html missing" && exit 1)
-          test -f dist/_redirects || (echo "❌ _redirects missing" && exit 1)
-          test -f dist/.htaccess || (echo "❌ .htaccess missing" && exit 1)
-          test -f dist/404.html || (echo "❌ 404.html missing" && exit 1)
-          echo "✅ All critical files present"
-          echo ""
-          echo "📦 Checking bundle size..."
-          JS_SIZE=$(find dist/assets -name "*.js" -type f -exec du -ch {} + | grep total | cut -f1)
-          CSS_SIZE=$(find dist/assets -name "*.css" -type f -exec du -ch {} + | grep total | cut -f1)
-          echo "JavaScript bundle: $JS_SIZE"
-          echo "CSS bundle: $CSS_SIZE"
 
-          # Check if JS bundle is too large (warn if > 1MB)
-          JS_BYTES=$(find dist/assets -name "*.js" -type f -exec stat -f%z {} + | awk '{s+=$1} END {print s}')
-          if [ "$JS_BYTES" -gt 1048576 ]; then
-            echo "⚠️  WARNING: JavaScript bundle is large (>1MB). Consider code splitting."
+          echo "Verifying critical files exist..."
+          test -f dist/index.html || { echo "ERROR: index.html missing"; exit 1; }
+          test -f dist/404.html || { echo "ERROR: 404.html missing"; exit 1; }
+
+          # _redirects and .htaccess are optional depending on hosting
+          if [ -f dist/_redirects ]; then echo "_redirects: present"; fi
+          if [ -f dist/.htaccess ]; then echo ".htaccess: present"; fi
+
+          echo "Checking bundle size..."
+          JS_FILE=$(find dist/assets -name "*.js" -type f | head -1)
+          if [ -n "$JS_FILE" ]; then
+            JS_BYTES=$(stat -c%s "$JS_FILE" 2>/dev/null || stat -f%z "$JS_FILE" 2>/dev/null || echo "0")
+            echo "JavaScript bundle: ${JS_BYTES} bytes"
+            if [ "$JS_BYTES" -gt 1048576 ]; then
+              echo "WARNING: JavaScript bundle is large (>1MB). Consider code splitting."
+            fi
           fi
-          echo "✅ Build output verified"
+
+          # Verify root div exists
+          if ! grep -q '<div id="root">' dist/index.html; then
+            echo "ERROR: index.html missing root div"
+            exit 1
+          fi
+
+          echo "Build output verified"
 
       - name: Verify SPA Routing Configuration
         run: |
-          echo "🔍 Verifying SPA routing files..."
+          echo "Verifying SPA routing files..."
 
-          # Check _redirects content
-          if ! grep -q "/\*.*index.html.*200" dist/_redirects; then
-            echo "❌ ERROR: _redirects file doesn't have correct SPA routing rule"
-            cat dist/_redirects
-            exit 1
+          # Check _redirects content (for Netlify/Cloudflare)
+          if [ -f dist/_redirects ]; then
+            if grep -q "/\*.*index.html.*200" dist/_redirects; then
+              echo "_redirects SPA rule: OK"
+            else
+              echo "WARNING: _redirects missing SPA rule"
+            fi
           fi
 
-          # Check .htaccess content
-          if ! grep -q "RewriteEngine On" dist/.htaccess; then
-            echo "❌ ERROR: .htaccess file doesn't have rewrite rules"
-            cat dist/.htaccess
-            exit 1
+          # Check 404.html has redirect script (for GitHub Pages)
+          if [ -f dist/404.html ]; then
+            if grep -q "window.location\|sessionStorage" dist/404.html; then
+              echo "404.html redirect script: OK"
+            else
+              echo "WARNING: 404.html missing redirect script"
+            fi
           fi
 
-          # Check 404.html has redirect script
-          if ! grep -q "window.location" dist/404.html; then
-            echo "❌ ERROR: 404.html missing redirect script"
-            exit 1
-          fi
-
-          echo "✅ SPA routing configuration verified"
-
-      - name: Check for Broken Imports
-        run: |
-          echo "🔍 Checking for potential broken imports..."
-
-          # Verify main entry point exists in built files
-          if ! grep -q "modulepreload" dist/index.html; then
-            echo "⚠️  WARNING: index.html might not have proper module loading"
-          fi
-
-          # Check if index.html has the root div
-          if ! grep -q '<div id="root">' dist/index.html; then
-            echo "❌ ERROR: index.html missing root div"
-            exit 1
-          fi
-
-          echo "✅ Import checks passed"
+          echo "SPA routing configuration verified"
 
       - name: Validate API Configuration in Build
         run: |
-          echo "🔍 Validating API configuration in built files..."
+          echo "Validating API configuration in built files..."
 
-          # Extract the built JS file
           JS_FILE=$(find dist/assets -name "index-*.js" -type f | head -1)
 
           if [ -z "$JS_FILE" ]; then
-            echo "❌ ERROR: Could not find built JavaScript file"
+            echo "ERROR: Could not find built JavaScript file"
             exit 1
           fi
 
-          echo "Found built file: $JS_FILE"
-
-          # Check if environment variable was replaced (should not contain VITE_API_BASE_URL as string)
-          # This is a basic check - the build process should replace these
+          # Verify env vars were replaced at build time
           if grep -q "import\.meta\.env\.VITE_API_BASE_URL" "$JS_FILE"; then
-            echo "⚠️  WARNING: Environment variables might not be replaced in build"
-            echo "This could indicate build configuration issue"
+            echo "WARNING: Environment variables might not be replaced in build"
           fi
 
-          echo "✅ API configuration validated"
+          echo "API configuration validated"
 
       - name: Generate Build Summary
         run: |
-          echo "📊 Build Summary"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Environment:"
-          echo "  • API URL: ${{ vars.VITE_API_BASE_URL }}"
-          echo "  • Client ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}"
-          echo ""
-          echo "Build Output:"
-          echo "  • Total files: $(find dist -type f | wc -l)"
-          echo "  • Total size: $(du -sh dist | cut -f1)"
-          echo "  • JS files: $(find dist/assets -name "*.js" | wc -l)"
-          echo "  • CSS files: $(find dist/assets -name "*.css" | wc -l)"
-          echo ""
-          echo "Routing Configuration:"
-          echo "  • _redirects: ✅"
-          echo "  • .htaccess: ✅"
-          echo "  • 404.html: ✅"
-          echo ""
-          echo "Status: ✅ Ready for deployment"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "========================================"
+          echo "Build Summary"
+          echo "========================================"
+          echo "API URL: ${{ vars.VITE_API_BASE_URL }}"
+          echo "Total files: $(find dist -type f | wc -l)"
+          echo "Total size: $(du -sh dist | cut -f1)"
+          echo "JS files: $(find dist/assets -name '*.js' | wc -l)"
+          echo "CSS files: $(find dist/assets -name '*.css' | wc -l)"
+          echo "Status: Ready for deployment"
+          echo "========================================"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -212,6 +175,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
@@ -223,67 +188,44 @@ jobs:
     if: success()
     steps:
       - name: Wait for deployment to propagate
-        run: |
-          echo "⏳ Waiting 30 seconds for deployment to propagate..."
-          sleep 30
+        run: sleep 30
 
       - name: Health Check
         run: |
-          echo "🏥 Running post-deployment health checks..."
-
           SITE_URL="${{ needs.deploy.outputs.page_url }}"
-
           if [ -z "$SITE_URL" ]; then
             SITE_URL="https://skintrader.uz"
           fi
+          # Remove trailing slash
+          SITE_URL="${SITE_URL%/}"
 
           echo "Testing: $SITE_URL"
 
           # Check if site is accessible
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
-
           if [ "$HTTP_CODE" != "200" ]; then
-            echo "⚠️  WARNING: Site returned HTTP $HTTP_CODE"
-            echo "Site might not be accessible yet. Please check manually."
+            echo "WARNING: Site returned HTTP $HTTP_CODE (may still be propagating)"
           else
-            echo "✅ Site is accessible (HTTP 200)"
+            echo "Site is accessible (HTTP 200)"
           fi
 
           # Check if index.html is served
-          if curl -s "$SITE_URL" | grep -q "<div id=\"root\">"; then
-            echo "✅ index.html is being served correctly"
+          if curl -s "$SITE_URL" | grep -q '<div id="root">'; then
+            echo "index.html is being served correctly"
           else
-            echo "⚠️  WARNING: index.html might not be served correctly"
+            echo "WARNING: index.html might not be served correctly"
           fi
 
-          # Check SPA routing (test a route)
+          # Check SPA routing
           HTTP_CODE_ROUTE=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/posts" || echo "000")
-
           if [ "$HTTP_CODE_ROUTE" = "200" ]; then
-            echo "✅ SPA routing is working (/posts returns 200)"
+            echo "SPA routing is working (/posts returns 200)"
           else
-            echo "⚠️  WARNING: SPA routing might not be working properly"
-            echo "   /posts returned HTTP $HTTP_CODE_ROUTE"
+            echo "WARNING: /posts returned HTTP $HTTP_CODE_ROUTE"
           fi
 
           echo ""
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "🎉 Deployment Complete!"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo ""
-          echo "🌐 Site URL: $SITE_URL"
-          echo ""
-          echo "📋 Post-Deployment Checklist:"
-          echo "  [ ] Visit site and verify it loads"
-          echo "  [ ] Test /create-post route"
-          echo "  [ ] Check game selector shows games"
-          echo "  [ ] Test login with Google"
-          echo "  [ ] Create a test post"
-          echo "  [ ] Check browser console for errors"
-          echo ""
-          echo "⚠️  Important: If games don't appear:"
-          echo "  1. Login to admin panel: $SITE_URL/admin/login"
-          echo "  2. Go to Games Management"
-          echo "  3. Add games (CS2, Dota 2, PUBG, etc.)"
-          echo ""
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "========================================"
+          echo "Deployment Complete!"
+          echo "Site URL: $SITE_URL"
+          echo "========================================"

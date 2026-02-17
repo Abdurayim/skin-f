@@ -15,6 +15,8 @@ export default function KYCReview() {
   const [selectedKyc, setSelectedKyc] = useState(null)
   const [reviewLoading, setReviewLoading] = useState(false)
   const [rejectionReason, setRejectionReason] = useState('')
+  const [reviewError, setReviewError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     fetchKycRequests()
@@ -43,6 +45,8 @@ export default function KYCReview() {
     if (!selectedKyc) return
 
     const kycId = selectedKyc._id || selectedKyc.id
+    const userName = selectedKyc.displayName || selectedKyc.email || 'User'
+    setReviewError('')
     setReviewLoading(true)
     try {
       const token = localStorage.getItem('admin_token')
@@ -63,13 +67,23 @@ export default function KYCReview() {
         body
       })
 
+      const data = await response.json().catch(() => ({}))
+
       if (response.ok) {
-        setKycRequests(kycRequests.filter(k => (k._id || k.id) !== kycId))
+        setKycRequests(prev => prev.filter(k => (k._id || k.id) !== kycId))
         setSelectedKyc(null)
         setRejectionReason('')
+        setSuccessMessage(
+          action === 'approved'
+            ? `✅ ${userName}'s KYC has been approved.`
+            : `❌ ${userName}'s KYC has been rejected.`
+        )
+        setTimeout(() => setSuccessMessage(''), 5000)
+      } else {
+        setReviewError(data?.message || `Action failed (${response.status}). Please try again.`)
       }
-    } catch {
-      // KYC review failed silently
+    } catch (err) {
+      setReviewError(err.message || 'Network error. Please try again.')
     } finally {
       setReviewLoading(false)
     }
@@ -77,6 +91,15 @@ export default function KYCReview() {
 
   return (
     <AdminLayout>
+      {successMessage && (
+        <div className="mb-4 p-3 bg-success/10 border border-success/30 rounded-lg flex items-center gap-2">
+          <svg className="w-5 h-5 text-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <p className="text-sm text-success font-medium">{successMessage}</p>
+        </div>
+      )}
+
       <div className="bg-surface border border-border rounded-xl overflow-hidden">
         {loading ? (
           <div className="flex justify-center py-12">
@@ -134,12 +157,23 @@ export default function KYCReview() {
         onClose={() => {
           setSelectedKyc(null)
           setRejectionReason('')
+          setReviewError('')
         }}
         title={t('admin.kycReview')}
         size="xl"
       >
         {selectedKyc && (
           <div className="space-y-6">
+            {reviewError && (
+              <div className="p-3 bg-error/10 border border-error/30 rounded-lg">
+                <p className="text-sm text-error flex items-center gap-2">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {reviewError}
+                </p>
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h4 className="text-sm font-medium text-text-primary mb-2">

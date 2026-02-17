@@ -72,7 +72,7 @@ export default function KYC() {
       }
 
       // Trigger KYC verification
-      const { data: verifyData, error: verifyError } = await post(ENDPOINTS.KYC_VERIFY)
+      const { data: verifyData, error: verifyError } = await post(ENDPOINTS.KYC_VERIFY, {})
 
       if (verifyData) {
         play('success')

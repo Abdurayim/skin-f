@@ -85,7 +85,7 @@ export default function PostFilters({ filters, onChange, onReset }) {
         >
           <option value="">{t('common.all')}</option>
           {games.map((game) => (
-            <option key={game.id} value={game.id}>
+            <option key={game._id || game.id} value={game._id || game.id}>
               {game.name}
             </option>
           ))}
