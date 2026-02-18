@@ -4,6 +4,7 @@ import Badge from '../../components/common/Badge'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatDate } from '../../utils/formatters'
 
 const ACTION_VARIANTS = {
@@ -60,12 +61,9 @@ export default function AuditLogs() {
   const fetchLogs = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const params = new URLSearchParams({ page, limit: '50' })
       if (actionFilter) params.append('action', actionFilter)
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_LOGS}?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_LOGS}?${params}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const list = data.data?.logs || data.data || []

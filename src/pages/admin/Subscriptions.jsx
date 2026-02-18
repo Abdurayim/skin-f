@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatDate } from '../../utils/formatters'
 
 export default function Subscriptions() {
@@ -31,10 +32,7 @@ export default function Subscriptions() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_STATS}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_STATS}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setStats(data.data || data)
@@ -47,12 +45,9 @@ export default function Subscriptions() {
   const fetchSubscriptions = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const params = new URLSearchParams({ page })
       if (statusFilter) params.append('status', statusFilter)
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTIONS}?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTIONS}?${params}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const list = data.data?.subscriptions || data.data || []
@@ -69,13 +64,8 @@ export default function Subscriptions() {
     if (!grantForm.userId.trim()) return
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_GRANT}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_GRANT}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           userId: grantForm.userId.trim(),
           durationDays: parseInt(grantForm.durationDays) || 30
@@ -99,13 +89,8 @@ export default function Subscriptions() {
     const subId = revokeTarget._id || revokeTarget.id
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_REVOKE(subId)}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_REVOKE(subId)}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ reason: revokeReason })
       })
       if (response.ok) {

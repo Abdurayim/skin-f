@@ -58,6 +58,8 @@ export default function AdminLayout({ children }) {
   const handleLogout = () => {
     play('whoosh')
     localStorage.removeItem('admin_token')
+    localStorage.removeItem('admin_refresh_token')
+    localStorage.removeItem('admin_info')
     navigate('/admin/login')
   }
 

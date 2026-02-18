@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatDate } from '../../utils/formatters'
 
 export default function Users() {
@@ -21,10 +22,7 @@ export default function Users() {
     const fetchUsers = async () => {
       setLoading(true)
       try {
-        const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_USERS}?page=${page}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+        const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_USERS}?page=${page}`)
         const data = await response.json().catch(() => ({}))
         if (response.ok) {
           const list = data.data?.users || data.data || []
@@ -51,13 +49,8 @@ export default function Users() {
 
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_USER_STATUS(userId)}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_USER_STATUS(userId)}`, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ status: statusForm.status, reason: statusForm.reason })
       })
 

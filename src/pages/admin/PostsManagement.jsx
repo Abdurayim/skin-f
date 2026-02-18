@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatPrice, formatDate } from '../../utils/formatters'
 
 export default function PostsManagement() {
@@ -23,10 +24,7 @@ export default function PostsManagement() {
   const fetchPosts = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POSTS}?page=${page}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POSTS}?page=${page}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const list = data.data?.posts || data.data || []
@@ -42,10 +40,8 @@ export default function PostsManagement() {
   const handleDelete = async (postId) => {
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POST_DELETE(postId)}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_POST_DELETE(postId)}`, {
+        method: 'DELETE'
       })
 
       if (response.ok) {

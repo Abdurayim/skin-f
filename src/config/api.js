@@ -54,6 +54,7 @@ export const ENDPOINTS = {
 
   // Admin
   ADMIN_LOGIN: '/v1/admin/login',
+  ADMIN_REFRESH_TOKEN: '/v1/admin/refresh-token',
   ADMIN_USERS: '/v1/admin/users',
   ADMIN_USER_STATUS: (id) => `/v1/admin/users/${id}/status`,
   ADMIN_KYC_PENDING: '/v1/admin/kyc/pending',

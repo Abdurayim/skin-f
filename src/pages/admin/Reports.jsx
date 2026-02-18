@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatDate } from '../../utils/formatters'
 
 export default function Reports() {
@@ -31,10 +32,7 @@ export default function Reports() {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_STATS}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_STATS}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setStats(data.data || data)
@@ -47,12 +45,9 @@ export default function Reports() {
   const fetchReports = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const params = new URLSearchParams({ page })
       if (statusFilter) params.append('status', statusFilter)
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORTS}?${params}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORTS}?${params}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const list = data.data?.reports || data.data || []
@@ -82,13 +77,8 @@ export default function Reports() {
     const reportId = selectedReport._id || selectedReport.id
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_RESOLVE(reportId)}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_RESOLVE(reportId)}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ action: resolveForm.action, notes: resolveForm.notes })
       })
       if (response.ok) {
@@ -109,13 +99,8 @@ export default function Reports() {
     const reportId = selectedReport._id || selectedReport.id
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_DISMISS(reportId)}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_DISMISS(reportId)}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ reason: dismissReason })
       })
       if (response.ok) {

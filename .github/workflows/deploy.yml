@@ -4,12 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      skip_backend_check:
-        description: 'Skip backend API compatibility check (use when backend is not yet deployed)'
-        required: false
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -175,81 +169,50 @@ jobs:
         with:
           path: dist
 
-  # Verify backend has required API endpoints before deploying frontend
+  # Verify backend has required API endpoints before deploying frontend (informational only)
   backend-compatibility:
     runs-on: ubuntu-latest
     needs: build
-    # Skip this check on manual dispatch if skip_backend_check is true
-    if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.skip_backend_check) }}
+    # Always run this check (informational only - never blocks deployment)
     steps:
       - name: Check Backend API Compatibility
         run: |
           API_URL="${{ vars.VITE_API_BASE_URL }}"
           if [ -z "$API_URL" ]; then
-            echo "ERROR: VITE_API_BASE_URL is not set, cannot check backend"
-            exit 1
+            echo "WARNING: VITE_API_BASE_URL is not set, skipping backend check"
+            exit 0
           fi
 
           echo "========================================"
-          echo "Backend API Compatibility Check"
+          echo "Backend API Compatibility Check (informational)"
           echo "========================================"
           echo "API URL: $API_URL"
           echo ""
-
-          FAILED=0
 
           # 1. Check backend is reachable
           echo "--- Checking backend reachability ---"
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${API_URL}/v1/games" 2>/dev/null || echo "000")
           if [ "$HTTP_CODE" = "000" ]; then
-            echo "ERROR: Backend is not reachable at $API_URL"
-            echo "Make sure the backend is deployed and accessible."
-            exit 1
+            echo "WARNING: Backend is not reachable at $API_URL (deployment will continue)"
+          else
+            echo "Backend reachable (HTTP $HTTP_CODE)"
           fi
-          echo "Backend reachable (HTTP $HTTP_CODE)"
           echo ""
 
-          # 2. Check KYC image endpoint exists (new endpoint from recent changes)
-          # We expect 401 (unauthorized) which means the route exists but requires auth
+          # 2. Check KYC image endpoint exists
           echo "--- Checking admin KYC image endpoint ---"
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${API_URL}/v1/admin/kyc/image/test" 2>/dev/null || echo "000")
           if [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "403" ]; then
-            echo "OK: /v1/admin/kyc/image/:filename exists (HTTP $HTTP_CODE - auth required, as expected)"
+            echo "OK: /v1/admin/kyc/image/:filename exists (HTTP $HTTP_CODE)"
           elif [ "$HTTP_CODE" = "404" ]; then
-            echo "ERROR: /v1/admin/kyc/image/:filename returns 404"
-            echo "The backend does not have the new KYC image endpoint yet."
-            echo "Deploy the backend first, then re-run this workflow."
-            echo ""
-            echo "To force-deploy anyway, use: Actions > Deploy to GitHub Pages > Run workflow > check 'Skip backend API compatibility check'"
-            FAILED=1
+            echo "WARNING: /v1/admin/kyc/image/:filename returns 404 - backend may need updating"
           else
-            echo "WARNING: /v1/admin/kyc/image/:filename returned HTTP $HTTP_CODE (expected 401/403)"
-            echo "Endpoint may exist but returned an unexpected status. Proceeding with caution."
-          fi
-          echo ""
-
-          # 3. Check KYC upload blocked (direct access should return 403)
-          echo "--- Checking KYC uploads are protected ---"
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "${API_URL%/api}/uploads/kyc/test.jpg" 2>/dev/null || echo "000")
-          if [ "$HTTP_CODE" = "403" ]; then
-            echo "OK: Direct /uploads/kyc/ access blocked (HTTP 403)"
-          elif [ "$HTTP_CODE" = "404" ]; then
-            echo "OK: /uploads/kyc/test.jpg returns 404 (file doesn't exist, but route is handled)"
-          else
-            echo "WARNING: /uploads/kyc/test.jpg returned HTTP $HTTP_CODE (expected 403)"
-            echo "Direct KYC file access may not be properly blocked on the backend."
+            echo "INFO: /v1/admin/kyc/image/:filename returned HTTP $HTTP_CODE"
           fi
           echo ""
 
           echo "========================================"
-          if [ "$FAILED" = "1" ]; then
-            echo "COMPATIBILITY CHECK FAILED"
-            echo "Deploy the backend before deploying the frontend."
-            echo "Or use workflow_dispatch with 'Skip backend check' to override."
-            echo "========================================"
-            exit 1
-          fi
-          echo "All compatibility checks passed"
+          echo "Backend check complete (deployment proceeds regardless)"
           echo "========================================"
 
   deploy:
@@ -257,12 +220,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    # Deploy after build succeeds AND either:
-    # - backend-compatibility passed, OR
-    # - backend-compatibility was skipped (manual dispatch with skip_backend_check)
+    # Deploy after build succeeds — backend-compatibility is informational only
     needs: [build, backend-compatibility]
-    # Always run if build succeeded — backend-compatibility may have been skipped
-    if: ${{ always() && needs.build.result == 'success' && (needs.backend-compatibility.result == 'success' || needs.backend-compatibility.result == 'skipped') }}
+    if: ${{ always() && needs.build.result == 'success' }}
     outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
     steps:

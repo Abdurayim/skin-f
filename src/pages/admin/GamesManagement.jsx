@@ -6,6 +6,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 
 export default function GamesManagement() {
   const { t } = useLanguage()
@@ -25,10 +26,7 @@ export default function GamesManagement() {
   const fetchGames = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAMES}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAMES}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const list = data.data?.games || data.data || []
@@ -63,19 +61,14 @@ export default function GamesManagement() {
     setFormError('')
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const body = {
         name: form.name.trim(),
         icon: form.icon.trim() || undefined,
         genres: form.genres.split(',').map(g => g.trim()).filter(Boolean),
         isActive: form.isActive
       }
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAME_CREATE}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAME_CREATE}`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(body)
       })
       const data = await response.json().catch(() => ({}))
@@ -100,19 +93,14 @@ export default function GamesManagement() {
     setFormError('')
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const body = {
         name: form.name.trim(),
         icon: form.icon.trim() || undefined,
         genres: form.genres.split(',').map(g => g.trim()).filter(Boolean),
         isActive: form.isActive
       }
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAME_UPDATE(gameId)}`, {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_GAME_UPDATE(gameId)}`, {
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(body)
       })
       const data = await response.json().catch(() => ({}))

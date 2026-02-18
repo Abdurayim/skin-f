@@ -4,6 +4,7 @@ import Card, { CardTitle } from '../../components/common/Card'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 
 export default function Dashboard() {
   const { t } = useLanguage()
@@ -13,10 +14,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_STATS}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+        const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_STATS}`)
         const result = await response.json().catch(() => ({}))
         if (response.ok) {
           setStats(result.data?.stats || result.data || result)

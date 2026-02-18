@@ -5,6 +5,7 @@ import Modal from '../../components/common/Modal'
 import Loader from '../../components/common/Loader'
 import { useLanguage } from '../../hooks/useLanguage'
 import { API_BASE_URL, ENDPOINTS } from '../../config/api'
+import { adminFetch } from '../../utils/adminAuth'
 import { formatDate } from '../../utils/formatters'
 
 /**
@@ -22,10 +23,7 @@ function AuthenticatedImage({ filePath, alt, className }) {
     const fetchImage = async () => {
       try {
         const filename = filePath.split('/').pop()
-        const token = localStorage.getItem('admin_token')
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_IMAGE(filename)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        })
+        const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_IMAGE(filename)}`)
         if (!response.ok) {
           setError(true)
           return
@@ -81,10 +79,7 @@ export default function KYCReview() {
   const fetchKycRequests = async () => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
-      const response = await fetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_PENDING}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_KYC_PENDING}`)
       const data = await response.json().catch(() => ({}))
       if (response.ok) {
         const requests = data.data?.users || data.data?.verifications || data.data?.requests || data.data || []
@@ -105,7 +100,6 @@ export default function KYCReview() {
     setReviewError('')
     setReviewLoading(true)
     try {
-      const token = localStorage.getItem('admin_token')
       const endpoint = action === 'approved'
         ? ENDPOINTS.ADMIN_KYC_APPROVE(kycId)
         : ENDPOINTS.ADMIN_KYC_REJECT(kycId)
@@ -114,12 +108,8 @@ export default function KYCReview() {
         ? JSON.stringify({ reason: rejectionReason })
         : undefined
 
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const response = await adminFetch(`${API_BASE_URL}${endpoint}`, {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body
       })
 
