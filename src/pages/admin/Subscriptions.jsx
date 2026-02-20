@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AdminLayout from '../../components/layout/AdminLayout'
 import Badge from '../../components/common/Badge'
 import Button from '../../components/common/Button'
@@ -21,6 +21,12 @@ export default function Subscriptions() {
   const [grantForm, setGrantForm] = useState({ userId: '', durationDays: 30 })
   const [revokeReason, setRevokeReason] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [userSearch, setUserSearch] = useState('')
+  const [userResults, setUserResults] = useState([])
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const searchTimeoutRef = useRef(null)
 
   useEffect(() => {
     fetchStats()
@@ -60,9 +66,46 @@ export default function Subscriptions() {
     }
   }
 
+  const searchUsers = async (query) => {
+    if (!query || query.length < 2) {
+      setUserResults([])
+      return
+    }
+    setSearchLoading(true)
+    try {
+      const params = new URLSearchParams({ search: query, limit: 10 })
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_USERS}?${params}`)
+      const data = await response.json().catch(() => ({}))
+      if (response.ok) {
+        const list = data.data?.users || data.data || []
+        setUserResults(Array.isArray(list) ? list : [])
+      }
+    } catch {
+      setUserResults([])
+    } finally {
+      setSearchLoading(false)
+    }
+  }
+
+  const handleUserSearchChange = (value) => {
+    setUserSearch(value)
+    setSelectedUser(null)
+    setGrantForm(f => ({ ...f, userId: '' }))
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current)
+    searchTimeoutRef.current = setTimeout(() => searchUsers(value), 300)
+  }
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user)
+    setGrantForm(f => ({ ...f, userId: user._id || user.id }))
+    setUserSearch(user.displayName || user.email || '')
+    setUserResults([])
+  }
+
   const handleGrant = async () => {
     if (!grantForm.userId.trim()) return
     setActionLoading(true)
+    setError('')
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_GRANT}`, {
         method: 'POST',
@@ -71,14 +114,19 @@ export default function Subscriptions() {
           durationDays: parseInt(grantForm.durationDays) || 30
         })
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setShowGrantModal(false)
         setGrantForm({ userId: '', durationDays: 30 })
+        setSelectedUser(null)
+        setUserSearch('')
         fetchSubscriptions()
         fetchStats()
+      } else {
+        setError(data.message || `Grant failed (${response.status})`)
       }
     } catch {
-      // Grant failed silently
+      setError('Network error. Please try again.')
     } finally {
       setActionLoading(false)
     }
@@ -88,19 +136,23 @@ export default function Subscriptions() {
     if (!revokeTarget) return
     const subId = revokeTarget._id || revokeTarget.id
     setActionLoading(true)
+    setError('')
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_REVOKE(subId)}`, {
         method: 'POST',
         body: JSON.stringify({ reason: revokeReason })
       })
+      const data = await response.json().catch(() => ({}))
       if (response.ok) {
         setRevokeTarget(null)
         setRevokeReason('')
         fetchSubscriptions()
         fetchStats()
+      } else {
+        setError(data.message || `Revoke failed (${response.status})`)
       }
     } catch {
-      // Revoke failed silently
+      setError('Network error. Please try again.')
     } finally {
       setActionLoading(false)
     }
@@ -254,22 +306,66 @@ export default function Subscriptions() {
       {/* Grant Modal */}
       <Modal
         isOpen={showGrantModal}
-        onClose={() => setShowGrantModal(false)}
+        onClose={() => { setShowGrantModal(false); setError(''); setSelectedUser(null); setUserSearch(''); setUserResults([]) }}
         title={t('admin.grantSubscription')}
       >
         <div className="space-y-4">
-          <div>
+          {error && (
+            <div className="p-3 bg-error/10 border border-error/20 rounded-lg text-error text-sm">
+              {error}
+            </div>
+          )}
+          <div className="relative">
             <label className="block text-sm font-medium text-text-primary mb-1.5">
-              {t('admin.userId')} *
+              {t('admin.user')} *
             </label>
             <input
               type="text"
-              value={grantForm.userId}
-              onChange={(e) => setGrantForm({ ...grantForm, userId: e.target.value })}
+              value={userSearch}
+              onChange={(e) => handleUserSearchChange(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg bg-surface border border-border text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              placeholder="MongoDB ObjectId"
+              placeholder="Search by name or email..."
             />
+            {searchLoading && (
+              <div className="absolute right-3 top-9">
+                <Loader size="sm" />
+              </div>
+            )}
+            {userResults.length > 0 && !selectedUser && (
+              <div className="absolute z-10 w-full mt-1 bg-surface border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {userResults.map(user => (
+                  <button
+                    key={user._id || user.id}
+                    onClick={() => handleSelectUser(user)}
+                    className="w-full px-4 py-3 text-left hover:bg-surface-hover flex items-center gap-3 border-b border-border last:border-0"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary text-sm font-medium">
+                        {user.displayName?.[0]?.toUpperCase() || 'U'}
+                      </span>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-text-primary text-sm font-medium truncate">{user.displayName || 'User'}</p>
+                      <p className="text-text-secondary text-xs truncate">{user.email || '-'}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
+          {selectedUser && (
+            <div className="p-3 bg-success/10 border border-success/20 rounded-lg flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <p className="text-text-primary text-sm font-medium truncate">{selectedUser.displayName}</p>
+                <p className="text-text-secondary text-xs truncate">{selectedUser.email}</p>
+              </div>
+            </div>
+          )}
           <div>
             <label className="block text-sm font-medium text-text-primary mb-1.5">
               {t('admin.durationDays')}
@@ -284,7 +380,7 @@ export default function Subscriptions() {
             />
           </div>
           <div className="flex gap-3 pt-2">
-            <Button variant="secondary" fullWidth onClick={() => setShowGrantModal(false)}>
+            <Button variant="secondary" fullWidth onClick={() => { setShowGrantModal(false); setError(''); setSelectedUser(null); setUserSearch(''); setUserResults([]) }}>
               {t('common.cancel')}
             </Button>
             <Button
@@ -303,11 +399,16 @@ export default function Subscriptions() {
       {/* Revoke Modal */}
       <Modal
         isOpen={!!revokeTarget}
-        onClose={() => setRevokeTarget(null)}
+        onClose={() => { setRevokeTarget(null); setError('') }}
         title={t('admin.revokeSubscription')}
       >
         {revokeTarget && (
           <div className="space-y-4">
+            {error && (
+              <div className="p-3 bg-error/10 border border-error/20 rounded-lg text-error text-sm">
+                {error}
+              </div>
+            )}
             <div className="p-4 bg-surface-hover rounded-lg">
               <p className="text-text-primary font-medium">
                 {revokeTarget.userId?.displayName || revokeTarget.user?.displayName || t('common.user')}
@@ -328,7 +429,7 @@ export default function Subscriptions() {
               />
             </div>
             <div className="flex gap-3 pt-2">
-              <Button variant="secondary" fullWidth onClick={() => setRevokeTarget(null)}>
+              <Button variant="secondary" fullWidth onClick={() => { setRevokeTarget(null); setError('') }}>
                 {t('common.cancel')}
               </Button>
               <Button variant="danger" fullWidth loading={actionLoading} onClick={handleRevoke}>
