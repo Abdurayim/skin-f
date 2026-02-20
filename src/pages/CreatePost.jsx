@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
 import PostForm from '../components/posts/PostForm'
 import Alert from '../components/common/Alert'
 import Button from '../components/common/Button'
+import Loader from '../components/common/Loader'
 import { useLanguage } from '../hooks/useLanguage'
 import { useAuth } from '../hooks/useAuth'
 import { useApi } from '../hooks/useApi'
@@ -14,9 +15,15 @@ import { getResponseData } from '../utils/apiHelpers'
 export default function CreatePost() {
   const navigate = useNavigate()
   const { t } = useLanguage()
-  const { isKYCVerified, profile } = useAuth()
+  const { isKYCVerified, profile, refreshProfile } = useAuth()
   const { post, loading, error } = useApi()
   const { play } = useSound()
+  const [checkingStatus, setCheckingStatus] = useState(true)
+
+  // Refetch profile on mount to get latest subscription/KYC status
+  useEffect(() => {
+    refreshProfile().finally(() => setCheckingStatus(false))
+  }, [])
 
   const handleSubmit = async (formData) => {
     try {
@@ -54,6 +61,22 @@ export default function CreatePost() {
   }
 
   const isSubscribed = profile?.subscriptionStatus === 'active' || profile?.subscriptionStatus === 'grace_period'
+
+  const handleCheckAgain = async () => {
+    setCheckingStatus(true)
+    await refreshProfile()
+    setCheckingStatus(false)
+  }
+
+  if (checkingStatus) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center py-20">
+          <Loader size="lg" />
+        </div>
+      </Layout>
+    )
+  }
 
   if (!isKYCVerified) {
     return (
@@ -151,11 +174,12 @@ export default function CreatePost() {
                 </svg>
                 {t('nav.subscription')}
               </Button>
-              <Link to="/posts">
-                <Button variant="secondary" size="lg">
-                  Browse Listings
-                </Button>
-              </Link>
+              <Button variant="secondary" size="lg" onClick={handleCheckAgain} loading={checkingStatus}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Check Again
+              </Button>
             </div>
           </div>
         </div>

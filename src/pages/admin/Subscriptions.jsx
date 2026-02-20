@@ -109,6 +109,7 @@ export default function Subscriptions() {
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_GRANT}`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: grantForm.userId.trim(),
           durationDays: parseInt(grantForm.durationDays) || 30
@@ -141,6 +142,7 @@ export default function Subscriptions() {
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_REVOKE(subId)}`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: revokeReason })
       })
       const data = await response.json().catch(() => ({}))

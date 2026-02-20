@@ -17,6 +17,10 @@ export default function Users() {
   const [selectedUser, setSelectedUser] = useState(null)
   const [statusForm, setStatusForm] = useState({ status: 'active', reason: '' })
   const [actionLoading, setActionLoading] = useState(false)
+  const [grantLoading, setGrantLoading] = useState(false)
+  const [grantDays, setGrantDays] = useState(30)
+  const [grantError, setGrantError] = useState('')
+  const [grantSuccess, setGrantSuccess] = useState('')
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -40,6 +44,40 @@ export default function Users() {
   const handleOpenManage = (user) => {
     setSelectedUser(user)
     setStatusForm({ status: user.status || 'active', reason: '' })
+    setGrantError('')
+    setGrantSuccess('')
+    setGrantDays(30)
+  }
+
+  const handleGrantSubscription = async () => {
+    if (!selectedUser) return
+    const userId = selectedUser._id || selectedUser.id
+    setGrantLoading(true)
+    setGrantError('')
+    setGrantSuccess('')
+    try {
+      const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_SUBSCRIPTION_GRANT}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, durationDays: parseInt(grantDays) || 30 })
+      })
+      const data = await response.json().catch(() => ({}))
+      if (response.ok) {
+        setGrantSuccess(`Subscription granted for ${grantDays} days`)
+        setUsers(users.map(u =>
+          (u._id || u.id) === userId
+            ? { ...u, subscriptionStatus: 'active' }
+            : u
+        ))
+      } else {
+        const details = data.errors?.map(e => e.message || e.field).join(', ')
+        setGrantError(details || data.message || `Failed (${response.status})`)
+      }
+    } catch {
+      setGrantError('Network error. Please try again.')
+    } finally {
+      setGrantLoading(false)
+    }
   }
 
   const handleUpdateStatus = async () => {
@@ -272,6 +310,45 @@ export default function Users() {
               >
                 {t('admin.updateStatus')}
               </Button>
+            </div>
+
+            {/* Grant Subscription */}
+            <div className="border-t border-border pt-4 mt-2">
+              <h4 className="text-sm font-semibold text-text-primary mb-3">{t('admin.grantSubscription')}</h4>
+              {grantError && (
+                <div className="p-2.5 mb-3 bg-error/10 border border-error/20 rounded-lg text-error text-sm">
+                  {grantError}
+                </div>
+              )}
+              {grantSuccess && (
+                <div className="p-2.5 mb-3 bg-success/10 border border-success/20 rounded-lg text-success text-sm">
+                  {grantSuccess}
+                </div>
+              )}
+              <div className="flex items-end gap-3">
+                <div className="flex-1">
+                  <label className="block text-xs text-text-secondary mb-1">{t('admin.durationDays')}</label>
+                  <input
+                    type="number"
+                    value={grantDays}
+                    onChange={(e) => setGrantDays(e.target.value)}
+                    min={1}
+                    max={365}
+                    className="w-full px-3 py-2 rounded-lg bg-surface border border-border text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <Button
+                  size="sm"
+                  loading={grantLoading}
+                  onClick={handleGrantSubscription}
+                  disabled={selectedUser?.subscriptionStatus === 'active'}
+                >
+                  {t('admin.grant')}
+                </Button>
+              </div>
+              {selectedUser?.subscriptionStatus === 'active' && (
+                <p className="text-xs text-success mt-2">User already has an active subscription</p>
+              )}
             </div>
           </div>
         )}
