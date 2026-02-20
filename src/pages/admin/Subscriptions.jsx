@@ -123,7 +123,8 @@ export default function Subscriptions() {
         fetchSubscriptions()
         fetchStats()
       } else {
-        setError(data.message || `Grant failed (${response.status})`)
+        const details = data.errors?.map(e => e.message || e.field).join(', ')
+        setError(details || data.message || `Grant failed (${response.status})`)
       }
     } catch {
       setError('Network error. Please try again.')
@@ -149,7 +150,8 @@ export default function Subscriptions() {
         fetchSubscriptions()
         fetchStats()
       } else {
-        setError(data.message || `Revoke failed (${response.status})`)
+        const details = data.errors?.map(e => e.message || e.field).join(', ')
+        setError(details || data.message || `Revoke failed (${response.status})`)
       }
     } catch {
       setError('Network error. Please try again.')
