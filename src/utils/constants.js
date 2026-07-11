@@ -1,26 +1,22 @@
 export const POST_TYPES = [
   { value: 'skin', label: 'Skin' },
-  { value: 'account', label: 'Account' },
-  { value: 'item', label: 'Item' }
+  { value: 'profile', label: 'Profile' }
 ]
 
 export const CURRENCIES = [
-  { value: 'USD', label: 'USD ($)', symbol: '$' },
-  { value: 'RUB', label: 'RUB (₽)', symbol: '₽' },
-  { value: 'UZS', label: 'UZS', symbol: 'UZS' }
+  { value: 'UZS', label: 'UZS', symbol: 'UZS' },
+  { value: 'USD', label: 'USD ($)', symbol: '$' }
 ]
 
 export const POST_STATUS = {
   ACTIVE: 'active',
-  SOLD: 'sold',
-  DRAFT: 'draft',
-  REMOVED: 'removed'
+  SOLD: 'sold'
 }
 
 export const KYC_STATUS = {
-  NONE: 'none',
+  NONE: 'not_submitted',
   PENDING: 'pending',
-  APPROVED: 'approved',
+  APPROVED: 'verified',
   REJECTED: 'rejected'
 }
 

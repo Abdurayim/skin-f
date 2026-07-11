@@ -26,19 +26,19 @@ export const messageService = {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId, postId })
+      body: JSON.stringify({ recipientId: userId, postId })
     })
     return response.json().catch(() => ({}))
   },
 
-  async sendMessage(recipientId, content, postId, token) {
+  async sendMessage(conversationId, content, postId, token) {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.SEND_MESSAGE}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ recipientId, content, postId })
+      body: JSON.stringify({ conversationId, content, postId })
     })
     return response.json().catch(() => ({}))
   }

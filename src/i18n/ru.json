@@ -170,10 +170,7 @@
     },
     "types": {
       "skin": "Скин",
-      "account": "Аккаунт",
-      "item": "Предмет",
-      "currency": "Игровая валюта",
-      "boosting": "Бустинг"
+      "profile": "Профиль"
     },
     "status": {
       "active": "Активно",

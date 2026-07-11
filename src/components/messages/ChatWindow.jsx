@@ -127,13 +127,13 @@ export default function ChatWindow({
             {/* Date separator could go here */}
             {messages.map((message, index) => (
               <div
-                key={message._id}
+                key={message.id}
                 className="animate-fade-in"
                 style={{ animationDelay: `${Math.min(index, 10) * 30}ms` }}
               >
                 <MessageBubble
                   message={message}
-                  isOwn={message.senderId === user?._id}
+                  isOwn={message.senderId === user?.id}
                 />
               </div>
             ))}

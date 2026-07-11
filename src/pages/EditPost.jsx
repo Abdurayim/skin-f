@@ -31,7 +31,7 @@ export default function EditPost() {
           price: post.price,
           currency: post.currency,
           type: post.type,
-          gameId: post.gameId || post.game?._id || post.game?.id,
+          gameId: post.game?.id || post.gameId,
           images: post.images?.map(url => ({ url, preview: url })) || []
         })
       }

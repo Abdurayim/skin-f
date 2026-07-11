@@ -6,11 +6,6 @@ export function formatPrice(price, currency = 'USD') {
       style: 'currency',
       currency: 'USD'
     }),
-    RUB: new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'RUB',
-      maximumFractionDigits: 0
-    }),
     UZS: new Intl.NumberFormat('uz-UZ', {
       style: 'currency',
       currency: 'UZS',

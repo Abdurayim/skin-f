@@ -52,7 +52,7 @@ export default function PostGrid({ posts, loading, hasMore, onLoadMore }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {posts.map((post, index) => (
           <div
-            key={post._id}
+            key={post.id}
             className="animate-fade-in-up opacity-0"
             style={{
               animationDelay: `${(index % 6) * 50}ms`,

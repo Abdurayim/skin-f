@@ -65,15 +65,14 @@ export default function Messages() {
     setSelectedId(null)
   }
 
-  const selectedConversation = conversations.find(c => (c._id || c.id) === selectedId)
+  const selectedConversation = conversations.find(c => c.id === selectedId)
 
   const handleSendMessage = async (content) => {
     if (!selectedId || !selectedConversation) return
 
     play('pop')
-    const recipientId = selectedConversation.otherParticipant?._id
     const { data } = await post(ENDPOINTS.SEND_MESSAGE, {
-      recipientId,
+      conversationId: selectedId,
       content
     })
     if (data) {

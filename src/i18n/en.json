@@ -190,10 +190,7 @@
     },
     "types": {
       "skin": "Skin",
-      "account": "Account",
-      "item": "Item",
-      "currency": "In-Game Currency",
-      "boosting": "Boosting"
+      "profile": "Profile"
     },
     "status": {
       "active": "Active",

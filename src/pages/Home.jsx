@@ -202,8 +202,8 @@ export default function Home() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
           {(games.length > 0 ? games : defaultGames).map((game, index) => (
             <Link
-              key={game._id || game.id || index}
-              to={`/posts?gameId=${game._id || game.id}`}
+              key={game.id || index}
+              to={`/posts?gameId=${game.id}`}
               className="group block animate-fade-in-up opacity-0"
               style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
               onMouseEnter={() => play('hover')}
@@ -366,7 +366,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
               {featuredPosts.map((post, index) => (
                 <div
-                  key={post._id}
+                  key={post.id}
                   className="animate-fade-in-up opacity-0"
                   style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}
                 >

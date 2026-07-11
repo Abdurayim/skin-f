@@ -97,7 +97,7 @@ export default function Subscriptions() {
 
   const handleSelectUser = (user) => {
     setSelectedUser(user)
-    setGrantForm(f => ({ ...f, userId: user._id || user.id }))
+    setGrantForm(f => ({ ...f, userId: user.id }))
     setUserSearch(user.displayName || user.email || '')
     setUserResults([])
   }
@@ -136,7 +136,7 @@ export default function Subscriptions() {
 
   const handleRevoke = async () => {
     if (!revokeTarget) return
-    const subId = revokeTarget._id || revokeTarget.id
+    const subId = revokeTarget.id
     setActionLoading(true)
     setError('')
     try {
@@ -238,7 +238,7 @@ export default function Subscriptions() {
                 </tr>
               ) : (
                 subscriptions.map(sub => (
-                  <tr key={sub._id || sub.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={sub.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <p className="text-text-primary font-medium">
                         {sub.userId?.displayName || sub.user?.displayName || t('common.user')}
@@ -339,7 +339,7 @@ export default function Subscriptions() {
               <div className="absolute z-10 w-full mt-1 bg-surface border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
                 {userResults.map(user => (
                   <button
-                    key={user._id || user.id}
+                    key={user.id}
                     onClick={() => handleSelectUser(user)}
                     className="w-full px-4 py-3 text-left hover:bg-surface-hover flex items-center gap-3 border-b border-border last:border-0"
                   >

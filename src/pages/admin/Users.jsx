@@ -51,7 +51,7 @@ export default function Users() {
 
   const handleGrantSubscription = async () => {
     if (!selectedUser) return
-    const userId = selectedUser._id || selectedUser.id
+    const userId = selectedUser.id
     setGrantLoading(true)
     setGrantError('')
     setGrantSuccess('')
@@ -65,7 +65,7 @@ export default function Users() {
       if (response.ok) {
         setGrantSuccess(`Subscription granted for ${grantDays} days`)
         setUsers(users.map(u =>
-          (u._id || u.id) === userId
+          u.id === userId
             ? { ...u, subscriptionStatus: 'active' }
             : u
         ))
@@ -82,7 +82,7 @@ export default function Users() {
 
   const handleUpdateStatus = async () => {
     if (!selectedUser) return
-    const userId = selectedUser._id || selectedUser.id
+    const userId = selectedUser.id
     if (statusForm.status !== 'active' && !statusForm.reason.trim()) return
 
     setActionLoading(true)
@@ -94,7 +94,7 @@ export default function Users() {
 
       if (response.ok) {
         setUsers(users.map(u =>
-          (u._id || u.id) === userId
+          u.id === userId
             ? { ...u, status: statusForm.status, statusReason: statusForm.reason }
             : u
         ))
@@ -163,7 +163,7 @@ export default function Users() {
                 </tr>
               ) : (
                 users.map(user => (
-                  <tr key={user._id || user.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={user.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">

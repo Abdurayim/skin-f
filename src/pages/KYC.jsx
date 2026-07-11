@@ -51,7 +51,7 @@ export default function KYC() {
       // Upload ID document
       setSubmitStep('uploading_id')
       const docFormData = new FormData()
-      docFormData.append('document', document)
+      docFormData.append('file', document)
       docFormData.append('documentType', 'id_card')
 
       const { data: docData, error: docError } = await post(ENDPOINTS.KYC_UPLOAD, docFormData)
@@ -66,7 +66,7 @@ export default function KYC() {
       // Upload selfie
       setSubmitStep('uploading_selfie')
       const selfieFormData = new FormData()
-      selfieFormData.append('document', selfie)
+      selfieFormData.append('file', selfie)
       selfieFormData.append('documentType', 'selfie')
 
       const { data: selfieData, error: selfieError } = await post(ENDPOINTS.KYC_UPLOAD, selfieFormData)

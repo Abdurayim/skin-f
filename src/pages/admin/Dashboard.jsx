@@ -134,7 +134,7 @@ export default function Dashboard() {
             <div className="space-y-3">
               {stats.recentUsers.map((user, i) => (
                 <div
-                  key={user._id}
+                  key={user.id}
                   className="flex items-center gap-3 p-3 bg-surface-hover rounded-xl hover:bg-primary/5 transition-colors"
                   style={{ animationDelay: `${(i + 5) * 50}ms` }}
                 >
@@ -183,7 +183,7 @@ export default function Dashboard() {
             <div className="space-y-3">
               {stats.recentPosts.map((post, i) => (
                 <div
-                  key={post._id}
+                  key={post.id}
                   className="flex items-center gap-3 p-3 bg-surface-hover rounded-xl hover:bg-primary/5 transition-colors"
                   style={{ animationDelay: `${(i + 5) * 50}ms` }}
                 >

@@ -19,11 +19,11 @@ export default function ConversationList({ conversations, selectedId, onSelect }
     <div className="divide-y divide-border/50">
       {conversations.map((conversation, index) => (
         <button
-          key={conversation._id}
-          onClick={() => handleSelect(conversation._id)}
+          key={conversation.id}
+          onClick={() => handleSelect(conversation.id)}
           className={`
             w-full p-4 text-left transition-all duration-300 relative group
-            ${selectedId === conversation._id
+            ${selectedId === conversation.id
               ? 'bg-primary/10 border-l-2 border-primary'
               : 'hover:bg-surface-hover border-l-2 border-transparent'
             }
@@ -36,7 +36,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
             <div className="relative">
               <div className={`
                 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300
-                ${selectedId === conversation._id
+                ${selectedId === conversation.id
                   ? 'bg-primary/20 ring-2 ring-primary/50'
                   : 'bg-primary/10'
                 }
@@ -62,7 +62,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
               <div className="flex items-center justify-between gap-2 mb-1">
                 <h4 className={`
                   font-semibold truncate transition-colors
-                  ${selectedId === conversation._id ? 'text-primary' : 'text-text-primary'}
+                  ${selectedId === conversation.id ? 'text-primary' : 'text-text-primary'}
                 `}>
                   {conversation.otherParticipant?.displayName || t('common.user')}
                 </h4>
@@ -101,7 +101,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
           {/* Hover highlight */}
           <div className={`
             absolute inset-y-0 left-0 w-1 bg-primary transform transition-transform duration-300 origin-left
-            ${selectedId === conversation._id ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}
+            ${selectedId === conversation.id ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}
           `} />
         </button>
       ))}

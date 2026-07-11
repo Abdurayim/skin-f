@@ -95,7 +95,7 @@ export default function KYCReview() {
   const handleReview = async (action) => {
     if (!selectedKyc) return
 
-    const kycId = selectedKyc._id || selectedKyc.id
+    const kycId = selectedKyc.id
     const userName = selectedKyc.displayName || selectedKyc.email || 'User'
     setReviewError('')
     setReviewLoading(true)
@@ -116,7 +116,7 @@ export default function KYCReview() {
       const data = await response.json().catch(() => ({}))
 
       if (response.ok) {
-        setKycRequests(prev => prev.filter(k => (k._id || k.id) !== kycId))
+        setKycRequests(prev => prev.filter(k => k.id !== kycId))
         setSelectedKyc(null)
         setRejectionReason('')
         setSuccessMessage(
@@ -172,7 +172,7 @@ export default function KYCReview() {
           <div className="grid gap-4 p-6">
             {kycRequests.map(kyc => (
               <div
-                key={kyc._id || kyc.id}
+                key={kyc.id}
                 className="flex items-center gap-4 p-4 bg-surface-hover rounded-lg"
               >
                 <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">

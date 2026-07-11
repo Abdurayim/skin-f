@@ -10,12 +10,11 @@ export default function PostCard({ post }) {
   const { play } = useSound()
   const typeVariants = {
     skin: 'primary',
-    account: 'warning',
-    item: 'success'
+    profile: 'warning'
   }
   return (
     <Link
-      to={`/posts/${post._id}`}
+      to={`/posts/${post.id}`}
       className="group block relative bg-surface border border-border rounded-2xl overflow-hidden card-hover"
       onMouseEnter={() => play('hover')}
     >

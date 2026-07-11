@@ -45,7 +45,7 @@ export default function PostsManagement() {
       })
 
       if (response.ok) {
-        setPosts(posts.filter(p => (p._id || p.id) !== postId))
+        setPosts(posts.filter(p => p.id !== postId))
         setSelectedPost(null)
       }
     } catch {
@@ -64,8 +64,7 @@ export default function PostsManagement() {
 
   const typeVariants = {
     skin: 'primary',
-    account: 'warning',
-    item: 'success'
+    profile: 'warning'
   }
 
   return (
@@ -111,7 +110,7 @@ export default function PostsManagement() {
                 </tr>
               ) : (
                 posts.map(post => (
-                  <tr key={post._id || post.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={post.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-surface overflow-hidden flex-shrink-0">
@@ -213,7 +212,7 @@ export default function PostsManagement() {
                 variant="danger"
                 fullWidth
                 loading={actionLoading}
-                onClick={() => handleDelete(selectedPost._id || selectedPost.id)}
+                onClick={() => handleDelete(selectedPost.id)}
               >
                 {t('admin.removePost')}
               </Button>

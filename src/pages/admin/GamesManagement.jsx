@@ -89,7 +89,7 @@ export default function GamesManagement() {
 
   const handleUpdate = async () => {
     if (!editingGame || !form.name.trim()) return
-    const gameId = editingGame._id || editingGame.id
+    const gameId = editingGame.id
     setFormError('')
     setActionLoading(true)
     try {
@@ -269,7 +269,7 @@ export default function GamesManagement() {
                 </tr>
               ) : (
                 games.map(game => (
-                  <tr key={game._id || game.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={game.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <p className="text-text-primary font-medium">{game.name}</p>
                     </td>

@@ -46,7 +46,7 @@ export default function CreatePost() {
       if (data) {
         play('success')
         // Backend returns: { data: { post: {...} } }
-        const postId = getResponseData(data, 'post', '_id') || data.post?._id || data._id
+        const postId = getResponseData(data, 'post', 'id') || data.post?.id || data.id
         if (postId) {
           navigate(`/posts/${postId}`)
         } else {

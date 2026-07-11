@@ -107,7 +107,7 @@ export default function Subscription() {
           <CardContent>
             {loading && !status ? (
               <p className="text-text-secondary">Loading...</p>
-            ) : status?.hasActiveSubscription ? (
+            ) : (status?.status === 'active' || status?.subscription?.status === 'active') ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -164,7 +164,7 @@ export default function Subscription() {
               <div className="space-y-3">
                 {history.map((item, index) => (
                   <div
-                    key={item._id || index}
+                    key={item.id || index}
                     className="flex items-center justify-between p-3 bg-surface-secondary rounded-lg"
                   >
                     <div>

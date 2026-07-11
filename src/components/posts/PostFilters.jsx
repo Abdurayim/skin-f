@@ -32,10 +32,7 @@ export default function PostFilters({ filters, onChange, onReset }) {
   const postTypes = [
     { value: '', label: t('common.all') },
     { value: 'skin', label: t('post.types.skin') },
-    { value: 'account', label: t('post.types.account') },
-    { value: 'item', label: t('post.types.item') },
-    { value: 'currency', label: t('post.types.currency') },
-    { value: 'boosting', label: t('post.types.boosting') }
+    { value: 'profile', label: t('post.types.profile') }
   ]
 
   const sortOptions = [
@@ -85,7 +82,7 @@ export default function PostFilters({ filters, onChange, onReset }) {
         >
           <option value="">{t('common.all')}</option>
           {games.map((game) => (
-            <option key={game._id || game.id} value={game._id || game.id}>
+            <option key={game.id} value={game.id}>
               {game.name}
             </option>
           ))}

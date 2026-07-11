@@ -121,7 +121,7 @@ export default function AuditLogs() {
                 </tr>
               ) : (
                 logs.map(log => (
-                  <tr key={log._id || log.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={log.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <p className="text-text-primary font-medium">
                         {log.adminId?.name || log.admin?.name || 'System'}

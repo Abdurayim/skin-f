@@ -74,7 +74,7 @@ export default function Reports() {
 
   const handleResolve = async () => {
     if (!selectedReport) return
-    const reportId = selectedReport._id || selectedReport.id
+    const reportId = selectedReport.id
     setActionLoading(true)
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_RESOLVE(reportId)}`, {
@@ -96,7 +96,7 @@ export default function Reports() {
 
   const handleDismiss = async () => {
     if (!selectedReport) return
-    const reportId = selectedReport._id || selectedReport.id
+    const reportId = selectedReport.id
     setActionLoading(true)
     try {
       const response = await adminFetch(`${API_BASE_URL}${ENDPOINTS.ADMIN_REPORT_DISMISS(reportId)}`, {
@@ -208,7 +208,7 @@ export default function Reports() {
                 </tr>
               ) : (
                 reports.map(report => (
-                  <tr key={report._id || report.id} className="border-b border-border hover:bg-surface-hover">
+                  <tr key={report.id} className="border-b border-border hover:bg-surface-hover">
                     <td className="px-6 py-4">
                       <p className="text-text-primary font-medium">
                         {report.reporterId?.displayName || report.reporter?.displayName || t('common.user')}

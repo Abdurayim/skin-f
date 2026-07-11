@@ -64,12 +64,12 @@ export default function GameSelector({ value, onChange, error }) {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {games.map((game) => (
             <button
-              key={game._id || game.id}
+              key={game.id}
               type="button"
-              onClick={() => onChange(game._id || game.id)}
+              onClick={() => onChange(game.id)}
               className={`
                 p-3 rounded-lg border text-left transition-colors
-                ${value === (game._id || game.id)
+                ${value === game.id
                   ? 'bg-primary/10 border-primary'
                   : 'bg-surface border-border hover:border-primary/50'
                 }

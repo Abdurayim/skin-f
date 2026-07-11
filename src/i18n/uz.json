@@ -190,10 +190,7 @@
     },
     "types": {
       "skin": "Skin",
-      "account": "Akkaunt",
-      "item": "Buyum",
-      "currency": "O'yin valyutasi",
-      "boosting": "Busting"
+      "profile": "Profil"
     },
     "status": {
       "active": "Faol",

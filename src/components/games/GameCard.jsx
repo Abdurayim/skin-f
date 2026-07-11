@@ -2,7 +2,7 @@ export default function GameCard({ game, selected, onClick }) {
   return (
     <button
       type="button"
-      onClick={() => onClick(game._id)}
+      onClick={() => onClick(game.id)}
       className={`
         p-4 rounded-xl border text-left transition-colors
         ${selected

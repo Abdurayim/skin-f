@@ -53,7 +53,7 @@ export default function MyPosts() {
 
     if (!error) {
       play('success')
-      setPosts(posts.filter(p => p._id !== deleteModal.postId))
+      setPosts(posts.filter(p => p.id !== deleteModal.postId))
       setDeleteModal({ open: false, postId: null })
     } else {
       play('error')
@@ -178,7 +178,7 @@ export default function MyPosts() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {posts.map((post, index) => (
               <div
-                key={post._id}
+                key={post.id}
                 className="relative group animate-fade-in-up"
                 style={{ animationDelay: `${(index % 8) * 50}ms` }}
               >
@@ -187,7 +187,7 @@ export default function MyPosts() {
                 {/* Action overlay */}
                 <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                   <Link
-                    to={`/posts/${post._id}/edit`}
+                    to={`/posts/${post.id}/edit`}
                     onClick={() => play('click')}
                     className="p-2.5 bg-surface/90 backdrop-blur-sm rounded-xl border border-border text-text-secondary hover:text-primary hover:border-primary/50 transition-all duration-300 hover:scale-110"
                   >
@@ -196,7 +196,7 @@ export default function MyPosts() {
                     </svg>
                   </Link>
                   <button
-                    onClick={() => openDeleteModal(post._id)}
+                    onClick={() => openDeleteModal(post.id)}
                     className="p-2.5 bg-surface/90 backdrop-blur-sm rounded-xl border border-border text-text-secondary hover:text-error hover:border-error/50 hover:bg-error/10 transition-all duration-300 hover:scale-110"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

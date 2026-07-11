@@ -29,7 +29,13 @@ export default function PostDetail() {
     const fetchPost = async () => {
       const { data } = await get(ENDPOINTS.POST_BY_ID(id))
       if (data) {
-        setPostData(data.data?.post || data.data || data)
+        const result = data.data || data
+      const post = result?.post || result
+      // Attach seller info if returned separately
+      if (result?.seller) {
+        post.seller = result.seller
+      }
+      setPostData(post)
       }
     }
     fetchPost()
@@ -43,13 +49,13 @@ export default function PostDetail() {
     play('click')
     setContactLoading(true)
     const { data } = await apiPost(ENDPOINTS.CONVERSATION_START, {
-      userId: postData.userId?._id || postData.userId || postData.user?._id,
+      recipientId: postData.seller?.id || postData.userId,
       postId: id
     })
     setContactLoading(false)
     if (data) {
       play('success')
-      const convId = data.data?._id || data._id
+      const convId = data.data?.conversation?.id || data.data?.id
       navigate(`/messages?conversation=${convId}`)
     }
   }
@@ -103,11 +109,15 @@ export default function PostDetail() {
 
   const typeVariants = {
     skin: 'primary',
-    account: 'warning',
-    item: 'success'
+    profile: 'warning'
   }
 
-  const isOwner = user?._id === (postData.userId?._id || postData.userId)
+  const seller = postData.seller || postData.userId
+  const sellerName = typeof seller === 'object' ? seller?.displayName : null
+  const sellerAvatar = typeof seller === 'object' ? seller?.avatarUrl : null
+  const sellerKyc = typeof seller === 'object' ? seller?.kycStatus : null
+  const sellerId = typeof seller === 'object' ? seller?.id : seller
+  const isOwner = user?.id === sellerId
 
   return (
     <Layout>
@@ -245,19 +255,19 @@ export default function PostDetail() {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden ring-2 ring-primary/30">
-                    {postData.userId?.avatarUrl ? (
+                    {sellerAvatar ? (
                       <img
-                        src={postData.userId.avatarUrl}
-                        alt={postData.userId.displayName}
+                        src={sellerAvatar}
+                        alt={sellerName}
                         className="w-full h-full object-cover"
                       />
                     ) : (
                       <span className="text-primary font-bold text-xl">
-                        {postData.userId?.displayName?.[0]?.toUpperCase() || 'U'}
+                        {sellerName?.[0]?.toUpperCase() || 'U'}
                       </span>
                     )}
                   </div>
-                  {postData.userId?.kycStatus === 'verified' && (
+                  {sellerKyc === 'verified' && (
                     <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-success rounded-full flex items-center justify-center ring-2 ring-surface">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -267,8 +277,8 @@ export default function PostDetail() {
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-text-primary flex items-center gap-2">
-                    {postData.userId?.displayName || t('common.user')}
-                    {postData.userId?.kycStatus === 'verified' && (
+                    {sellerName || t('common.user')}
+                    {sellerKyc === 'verified' && (
                       <span className="text-xs text-success">Verified</span>
                     )}
                   </p>
