@@ -90,3 +90,4 @@ screenshots/
 
 # API logger temp files
 /private/tmp/
+.claude/
