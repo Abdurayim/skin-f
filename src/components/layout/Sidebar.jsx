@@ -32,7 +32,6 @@ export default function Sidebar({ isOpen, onClose }) {
   const isActive = (path) => location.pathname === path
 
   const navItems = [
-    { path: '/demo', icon: 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z', label: 'Demo', auth: false, highlight: true },
     { path: '/posts', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', label: t('nav.browse') || 'Browse', auth: false },
     { path: '/create-post', icon: 'M12 4v16m8-8H4', label: t('nav.sell'), auth: true },
     { path: '/messages', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', label: t('nav.messages'), auth: true },

@@ -15,7 +15,6 @@ import KYC from './pages/KYC'
 import Messages from './pages/Messages'
 import Subscription from './pages/Subscription'
 import PaymentCallback from './pages/PaymentCallback'
-import Demo from './pages/Demo'
 import NotFound from './pages/NotFound'
 
 // Admin Pages
@@ -35,7 +34,6 @@ export default function App() {
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/demo" element={<Demo />} />
       <Route path="/posts" element={<Posts />} />
       <Route path="/posts/:id" element={<PostDetail />} />
 
