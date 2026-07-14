@@ -91,6 +91,14 @@ export const ENDPOINTS = {
   ADMIN_TOPUP_REJECT: (id) => `/v1/admin/topups/${id}/reject`,
   ADMIN_TOPUP_CHEQUE: (filename) => `/v1/admin/topups/cheque/${filename}`,
 
+  // Notifications
+  NOTIFICATIONS: '/v1/notifications',
+  NOTIFICATION_READ: (id) => `/v1/notifications/${id}/read`,
+  NOTIFICATIONS_READ_ALL: '/v1/notifications/read-all',
+
+  // Admin revenue
+  ADMIN_REVENUE: '/v1/admin/revenue',
+
   // Subscriptions
   SUBSCRIPTION_STATUS: '/v1/subscriptions/status',
   SUBSCRIPTION_INITIATE: '/v1/subscriptions/initiate',

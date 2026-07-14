@@ -365,7 +365,16 @@
     "amount": "Summa",
     "requestedOn": "So'ralgan sana",
     "reviewNote": "Izoh (ixtiyoriy)",
-    "currentBalance": "Foydalanuvchi balansi"
+    "currentBalance": "Foydalanuvchi balansi",
+    "revenue": "Daromad",
+    "totalRevenue": "Jami tasdiqlangan",
+    "monthRevenue": "Shu oyda",
+    "todayRevenue": "Bugun",
+    "pendingRevenue": "Tekshiruv kutilmoqda",
+    "outstandingBalance": "Foydalanuvchilar balansi (sarflanmagan)",
+    "consumedRevenue": "E'lonlarga sarflangan",
+    "recentTopups": "So'nggi tasdiqlangan to'ldirishlar",
+    "approvedRequests": "tasdiqlangan so'rovlar"
   },
   "footer": {
     "description": "O'yin skinlari, akkauntlar va buyumlarni sotib olish va sotish uchun ishonchli bozor.",
@@ -433,5 +442,16 @@
     "approved": "Tasdiqlandi",
     "rejected": "Rad etildi",
     "som": "so'm"
+  },
+  "notifications": {
+    "title": "Bildirishnomalar",
+    "empty": "Hozircha bildirishnomalar yo'q",
+    "markAllRead": "Barchasini o'qilgan deb belgilash",
+    "topup_approved": "Balans to'ldirildi: +{{amount}} so'm",
+    "topup_rejected": "{{amount}} so'mlik to'ldirish rad etildi",
+    "kyc_approved": "Shaxsingiz tasdiqlandi — endi e'lon joylashtirishingiz mumkin",
+    "kyc_rejected": "Shaxsni tasdiqlash rad etildi",
+    "post_published": "\"{{title}}\" e'loningiz chop etildi (−{{cost}} so'm)",
+    "post_removed": "\"{{title}}\" e'loningiz moderatorlar tomonidan o'chirildi"
   }
 }

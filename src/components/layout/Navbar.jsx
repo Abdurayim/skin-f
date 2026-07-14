@@ -5,6 +5,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import useSound from '../../hooks/useSound'
 import Dropdown, { DropdownItem, DropdownDivider } from '../common/Dropdown'
 import Button from '../common/Button'
+import NotificationBell from '../common/NotificationBell'
 import Sidebar from './Sidebar'
 
 export default function Navbar() {
@@ -140,6 +141,9 @@ export default function Navbar() {
                   </DropdownItem>
                 ))}
               </Dropdown>
+
+              {/* Notifications */}
+              {isAuthenticated && <NotificationBell />}
 
               {/* User Menu / Login Button */}
               {isAuthenticated ? (

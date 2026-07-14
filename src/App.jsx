@@ -27,6 +27,7 @@ import PostsManagement from './pages/admin/PostsManagement'
 import GamesManagement from './pages/admin/GamesManagement'
 import Subscriptions from './pages/admin/Subscriptions'
 import TopUps from './pages/admin/TopUps'
+import Revenue from './pages/admin/Revenue'
 import Reports from './pages/admin/Reports'
 import AuditLogs from './pages/admin/AuditLogs'
 
@@ -162,6 +163,14 @@ export default function App() {
         element={
           <AdminProtectedRoute>
             <TopUps />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/revenue"
+        element={
+          <AdminProtectedRoute>
+            <Revenue />
           </AdminProtectedRoute>
         }
       />

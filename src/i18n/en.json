@@ -426,7 +426,16 @@
     "amount": "Amount",
     "requestedOn": "Requested",
     "reviewNote": "Note (optional)",
-    "currentBalance": "User balance"
+    "currentBalance": "User balance",
+    "revenue": "Revenue",
+    "totalRevenue": "Total verified",
+    "monthRevenue": "This month",
+    "todayRevenue": "Today",
+    "pendingRevenue": "Pending review",
+    "outstandingBalance": "User balances (unspent)",
+    "consumedRevenue": "Spent on posts",
+    "recentTopups": "Recent verified top-ups",
+    "approvedRequests": "approved requests"
   },
   "footer": {
     "description": "The trusted marketplace for buying and selling game skins, accounts, and items.",
@@ -494,5 +503,16 @@
     "approved": "Approved",
     "rejected": "Rejected",
     "som": "so'm"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "markAllRead": "Mark all as read",
+    "topup_approved": "Balance topped up: +{{amount}} so'm",
+    "topup_rejected": "Your top-up of {{amount}} so'm was rejected",
+    "kyc_approved": "Your identity is verified — you can now publish posts",
+    "kyc_rejected": "Identity verification was rejected",
+    "post_published": "Your post \"{{title}}\" is live (−{{cost}} so'm)",
+    "post_removed": "Your post \"{{title}}\" was removed by moderators"
   }
 }
