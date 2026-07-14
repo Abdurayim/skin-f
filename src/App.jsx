@@ -14,6 +14,7 @@ import Profile from './pages/Profile'
 import KYC from './pages/KYC'
 import Messages from './pages/Messages'
 import Subscription from './pages/Subscription'
+import Balance from './pages/Balance'
 import PaymentCallback from './pages/PaymentCallback'
 import NotFound from './pages/NotFound'
 
@@ -25,6 +26,7 @@ import KYCReview from './pages/admin/KYCReview'
 import PostsManagement from './pages/admin/PostsManagement'
 import GamesManagement from './pages/admin/GamesManagement'
 import Subscriptions from './pages/admin/Subscriptions'
+import TopUps from './pages/admin/TopUps'
 import Reports from './pages/admin/Reports'
 import AuditLogs from './pages/admin/AuditLogs'
 
@@ -94,6 +96,14 @@ export default function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/balance"
+        element={
+          <ProtectedRoute>
+            <Balance />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/payments/callback" element={<PaymentCallback />} />
 
       {/* Admin Routes */}
@@ -144,6 +154,14 @@ export default function App() {
         element={
           <AdminProtectedRoute>
             <Subscriptions />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/topups"
+        element={
+          <AdminProtectedRoute>
+            <TopUps />
           </AdminProtectedRoute>
         }
       />

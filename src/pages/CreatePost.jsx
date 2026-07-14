@@ -45,6 +45,8 @@ export default function CreatePost() {
 
       if (data) {
         play('success')
+        // Refresh profile so the new (post-fee) balance is reflected
+        refreshProfile()
         // Backend returns: { data: { post: {...} } }
         const postId = getResponseData(data, 'post', 'id') || data.post?.id || data.id
         if (postId) {
@@ -60,7 +62,9 @@ export default function CreatePost() {
     }
   }
 
-  const isSubscribed = profile?.subscriptionStatus === 'active' || profile?.subscriptionStatus === 'grace_period'
+  const POST_COST = 2000
+  const balance = profile?.balance ?? 0
+  const hasEnoughBalance = balance >= POST_COST
 
   const handleCheckAgain = async () => {
     setCheckingStatus(true)
@@ -148,7 +152,7 @@ export default function CreatePost() {
     )
   }
 
-  if (!isSubscribed) {
+  if (!hasEnoughBalance) {
     return (
       <Layout>
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
@@ -162,17 +166,20 @@ export default function CreatePost() {
               </div>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-4">
-              {t('post.subscriptionRequired')}
+              {t('post.balanceRequired')}
             </h1>
-            <p className="text-text-secondary max-w-md mx-auto mb-8">
-              {t('post.subscriptionRequiredDesc')}
+            <p className="text-text-secondary max-w-md mx-auto mb-2">
+              {t('post.balanceRequiredDesc')}
+            </p>
+            <p className="text-text-secondary mb-8">
+              {t('post.yourBalance')}: <span className="font-semibold text-text-primary">{balance.toLocaleString()} {t('balance.som')}</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button glow size="lg" onClick={() => navigate('/subscription')}>
+              <Button glow size="lg" onClick={() => navigate('/balance')}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
-                {t('nav.subscription')}
+                {t('post.topUp')}
               </Button>
               <Button variant="secondary" size="lg" onClick={handleCheckAgain} loading={checkingStatus}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,6 +214,16 @@ export default function CreatePost() {
             {t('post.createTitle')}
           </h1>
           <p className="text-text-secondary mt-1">{t('post.createDesc')}</p>
+        </div>
+
+        {/* Cost notice */}
+        <div className="mb-6 flex items-center justify-between gap-3 bg-primary/5 border border-primary/20 rounded-2xl px-5 py-4 animate-fade-in">
+          <p className="text-sm text-text-primary">
+            {t('post.costNotice')}
+          </p>
+          <p className="text-sm text-text-secondary whitespace-nowrap">
+            {t('post.yourBalance')}: <span className="font-semibold text-text-primary">{balance.toLocaleString()} {t('balance.som')}</span>
+          </p>
         </div>
 
         {/* Form Card */}

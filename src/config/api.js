@@ -82,6 +82,15 @@ export const ENDPOINTS = {
   ADMIN_REPORT_RESOLVE: (id) => `/v1/admin/reports/${id}/resolve`,
   ADMIN_REPORT_DISMISS: (id) => `/v1/admin/reports/${id}/dismiss`,
 
+  // Balance
+  BALANCE: '/v1/balance',
+  BALANCE_TOPUP: '/v1/balance/topup',
+  BALANCE_TOPUPS: '/v1/balance/topups',
+  ADMIN_TOPUPS: '/v1/admin/topups',
+  ADMIN_TOPUP_APPROVE: (id) => `/v1/admin/topups/${id}/approve`,
+  ADMIN_TOPUP_REJECT: (id) => `/v1/admin/topups/${id}/reject`,
+  ADMIN_TOPUP_CHEQUE: (filename) => `/v1/admin/topups/cheque/${filename}`,
+
   // Subscriptions
   SUBSCRIPTION_STATUS: '/v1/subscriptions/status',
   SUBSCRIPTION_INITIATE: '/v1/subscriptions/initiate',

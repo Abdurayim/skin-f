@@ -30,7 +30,8 @@
     "verification": "Verification",
     "subscription": "Subscription",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "balance": "Balance"
   },
   "auth": {
     "login": "Login",
@@ -199,7 +200,12 @@
       "removed": "Removed"
     },
     "views": "views",
-    "myListings": "My Listings"
+    "myListings": "My Listings",
+    "balanceRequired": "Insufficient balance",
+    "balanceRequiredDesc": "Publishing a post costs 2,000 so'm. Top up your balance to continue.",
+    "topUp": "Top up balance",
+    "costNotice": "Publishing this post costs 2,000 so'm from your balance.",
+    "yourBalance": "Your balance"
   },
   "filters": {
     "title": "Filters",
@@ -413,7 +419,14 @@
     "updateStatus": "Update Status",
     "reasonRequired": "Reason is required for suspend/ban",
     "grant": "Grant",
-    "revoke": "Revoke"
+    "revoke": "Revoke",
+    "topups": "Top-ups",
+    "noTopups": "No top-up requests",
+    "chequeTitle": "Cheque",
+    "amount": "Amount",
+    "requestedOn": "Requested",
+    "reviewNote": "Note (optional)",
+    "currentBalance": "User balance"
   },
   "footer": {
     "description": "The trusted marketplace for buying and selling game skins, accounts, and items.",
@@ -456,5 +469,30 @@
   },
   "manage": {
     "title": "Manage your listings"
+  },
+  "balance": {
+    "title": "Add Balance",
+    "current": "Current balance",
+    "postCost": "Each post costs 2,000 so'm",
+    "howTo": "How to top up",
+    "step1": "Transfer the amount to the card below",
+    "step2": "Take a screenshot of the payment cheque",
+    "step3": "Enter the amount and upload the cheque",
+    "step4": "Wait for admin approval — your balance will be credited",
+    "cardTitle": "Card number",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "amount": "Amount (so'm)",
+    "amountPlaceholder": "e.g. 10000",
+    "cheque": "Payment cheque",
+    "chequeDesc": "Upload a screenshot or photo of the payment cheque",
+    "submit": "Submit request",
+    "submitted": "Request submitted! It will be reviewed by an administrator shortly.",
+    "history": "Top-up history",
+    "noHistory": "No top-up requests yet",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "som": "so'm"
   }
 }

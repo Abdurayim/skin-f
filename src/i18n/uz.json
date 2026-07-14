@@ -30,7 +30,8 @@
     "verification": "Tekshiruv",
     "subscription": "Obuna",
     "login": "Kirish",
-    "logout": "Chiqish"
+    "logout": "Chiqish",
+    "balance": "Balans"
   },
   "auth": {
     "login": "Kirish",
@@ -199,7 +200,12 @@
       "removed": "O'chirilgan"
     },
     "views": "ko'rishlar",
-    "myListings": "E'lonlarim"
+    "myListings": "E'lonlarim",
+    "balanceRequired": "Balans yetarli emas",
+    "balanceRequiredDesc": "E'lon joylashtirish 2 000 so'm turadi. Davom etish uchun balansingizni to'ldiring.",
+    "topUp": "Balansni to'ldirish",
+    "costNotice": "E'lon joylashtirilganda balansingizdan 2 000 so'm yechiladi.",
+    "yourBalance": "Balansingiz"
   },
   "filters": {
     "title": "Filtrlar",
@@ -352,7 +358,14 @@
     "viewAll": "Hammasini ko'rish",
     "welcomeBack": "Xush kelibsiz! Mana sizning umumiy ko'rinishingiz.",
     "backToSite": "Saytga qaytish",
-    "loadingDashboard": "Boshqaruv paneli yuklanmoqda..."
+    "loadingDashboard": "Boshqaruv paneli yuklanmoqda...",
+    "topups": "To'ldirishlar",
+    "noTopups": "To'ldirish so'rovlari yo'q",
+    "chequeTitle": "Chek",
+    "amount": "Summa",
+    "requestedOn": "So'ralgan sana",
+    "reviewNote": "Izoh (ixtiyoriy)",
+    "currentBalance": "Foydalanuvchi balansi"
   },
   "footer": {
     "description": "O'yin skinlari, akkauntlar va buyumlarni sotib olish va sotish uchun ishonchli bozor.",
@@ -395,5 +408,30 @@
   },
   "manage": {
     "title": "E'lonlaringizni boshqaring"
+  },
+  "balance": {
+    "title": "Balansni to'ldirish",
+    "current": "Joriy balans",
+    "postCost": "Har bir e'lon 2 000 so'm turadi",
+    "howTo": "Qanday to'ldiriladi",
+    "step1": "Quyidagi kartaga summani o'tkazing",
+    "step2": "To'lov chekining skrinshotini oling",
+    "step3": "Summani kiriting va chekni yuklang",
+    "step4": "Administrator tasdiqlagach balansingiz to'ldiriladi",
+    "cardTitle": "Karta raqami",
+    "copy": "Nusxalash",
+    "copied": "Nusxalandi!",
+    "amount": "Summa (so'm)",
+    "amountPlaceholder": "masalan: 10000",
+    "cheque": "To'lov cheki",
+    "chequeDesc": "Chek skrinshotini yoki rasmini yuklang",
+    "submit": "So'rov yuborish",
+    "submitted": "So'rov yuborildi! Administrator tez orada ko'rib chiqadi.",
+    "history": "To'ldirish tarixi",
+    "noHistory": "Hozircha to'ldirish so'rovlari yo'q",
+    "pending": "Kutilmoqda",
+    "approved": "Tasdiqlandi",
+    "rejected": "Rad etildi",
+    "som": "so'm"
   }
 }
