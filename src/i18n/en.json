@@ -62,19 +62,23 @@
       },
       "slide4": {
         "title": "Rust Trading",
-        "subtitle": "Trade valuable Rust items, weapons, and resources"
+        "subtitle": "Trade valuable Rust items, weapons, and resources",
+        "cta": "Trade Rust Items"
       },
       "slide5": {
         "title": "Team Fortress 2",
-        "subtitle": "Buy and sell TF2 hats, weapons, and rare items"
+        "subtitle": "Buy and sell TF2 hats, weapons, and rare items",
+        "cta": "Browse TF2 Items"
       },
       "slide6": {
         "title": "GTA V Online",
-        "subtitle": "Premium GTA V accounts and in-game currency trading"
+        "subtitle": "Premium GTA V accounts and in-game currency trading",
+        "cta": "View GTA Offers"
       },
       "slide7": {
         "title": "ARK Trading",
-        "subtitle": "Trade ARK accounts, creatures, and valuable resources"
+        "subtitle": "Trade ARK accounts, creatures, and valuable resources",
+        "cta": "Explore ARK Deals"
       },
       "tradeNow": "Trade Now",
       "startSelling": "Start Selling",
@@ -298,7 +302,9 @@
       "none": "Not Verified",
       "pending": "Pending",
       "approved": "Verified",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "not_submitted": "Not Verified",
+      "verified": "Verified"
     },
     "step": {
       "document": "Document",
@@ -435,7 +441,8 @@
     "outstandingBalance": "User balances (unspent)",
     "consumedRevenue": "Spent on posts",
     "recentTopups": "Recent verified top-ups",
-    "approvedRequests": "approved requests"
+    "approvedRequests": "approved requests",
+    "post": "Post"
   },
   "footer": {
     "description": "The trusted marketplace for buying and selling game skins, accounts, and items.",

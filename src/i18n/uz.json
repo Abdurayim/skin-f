@@ -62,19 +62,23 @@
       },
       "slide4": {
         "title": "Rust Savdosi",
-        "subtitle": "Rust buyumlari, qurollari va resurslarini ayirboshlang"
+        "subtitle": "Rust buyumlari, qurollari va resurslarini ayirboshlang",
+        "cta": "Rust buyumlari savdosi"
       },
       "slide5": {
         "title": "Team Fortress 2",
-        "subtitle": "TF2 shlyaplari, qurollari va noyob buyumlarini sotib oling"
+        "subtitle": "TF2 shlyaplari, qurollari va noyob buyumlarini sotib oling",
+        "cta": "TF2 buyumlarini ko'rish"
       },
       "slide6": {
         "title": "GTA V Online",
-        "subtitle": "Premium GTA V akkauntlari va o'yin valyutasi savdosi"
+        "subtitle": "Premium GTA V akkauntlari va o'yin valyutasi savdosi",
+        "cta": "GTA takliflari"
       },
       "slide7": {
         "title": "ARK Savdosi",
-        "subtitle": "ARK akkauntlari, jonzotlar va qimmatli resurslarni ayirboshlang"
+        "subtitle": "ARK akkauntlari, jonzotlar va qimmatli resurslarni ayirboshlang",
+        "cta": "ARK bitimlari"
       },
       "tradeNow": "Hozir Savdo Qiling",
       "startSelling": "Sotishni boshlash",
@@ -298,7 +302,9 @@
       "none": "Tasdiqlanmagan",
       "pending": "Tekshiruvda",
       "approved": "Tasdiqlangan",
-      "rejected": "Rad etildi"
+      "rejected": "Rad etildi",
+      "not_submitted": "Tasdiqlanmagan",
+      "verified": "Tasdiqlangan"
     },
     "step": {
       "document": "Hujjat",
@@ -374,7 +380,8 @@
     "outstandingBalance": "Foydalanuvchilar balansi (sarflanmagan)",
     "consumedRevenue": "E'lonlarga sarflangan",
     "recentTopups": "So'nggi tasdiqlangan to'ldirishlar",
-    "approvedRequests": "tasdiqlangan so'rovlar"
+    "approvedRequests": "tasdiqlangan so'rovlar",
+    "post": "E'lon"
   },
   "footer": {
     "description": "O'yin skinlari, akkauntlar va buyumlarni sotib olish va sotish uchun ishonchli bozor.",
