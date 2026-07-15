@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import useSound from '../../hooks/useSound'
 
 export default function Carousel({
   children,
@@ -13,26 +12,24 @@ export default function Carousel({
   const [isHovered, setIsHovered] = useState(false)
   const [touchStart, setTouchStart] = useState(null)
   const [touchEnd, setTouchEnd] = useState(null)
-  const { play } = useSound()
   const containerRef = useRef(null)
 
   const items = Array.isArray(children) ? children : [children]
   const totalItems = items.length
 
+  // Slide transitions are intentionally silent — the auto-play timer
+  // advances every few seconds and a sound each time is intrusive.
   const goToSlide = useCallback((index) => {
-    play('slide')
     setCurrentIndex(index)
-  }, [play])
+  }, [])
 
   const goToNext = useCallback(() => {
-    play('whoosh')
     setCurrentIndex((prev) => (prev + 1) % totalItems)
-  }, [totalItems, play])
+  }, [totalItems])
 
   const goToPrev = useCallback(() => {
-    play('whoosh')
     setCurrentIndex((prev) => (prev - 1 + totalItems) % totalItems)
-  }, [totalItems, play])
+  }, [totalItems])
 
   useEffect(() => {
     if (!autoPlay || isHovered || totalItems <= 1) return
@@ -159,7 +156,6 @@ export function MultiCarousel({
 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [visibleItems, setVisibleItems] = useState(4)
-  const { play } = useSound()
   const containerRef = useRef(null)
 
   const items = Array.isArray(children) ? children : [children]
@@ -184,14 +180,12 @@ export function MultiCarousel({
 
   const goToNext = () => {
     if (currentIndex < maxIndex) {
-      play('whoosh')
       setCurrentIndex(prev => Math.min(prev + 1, maxIndex))
     }
   }
 
   const goToPrev = () => {
     if (currentIndex > 0) {
-      play('whoosh')
       setCurrentIndex(prev => Math.max(prev - 1, 0))
     }
   }

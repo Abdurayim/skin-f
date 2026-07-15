@@ -21,6 +21,17 @@ const KNOWN_GAME_ART = {
   'overwatch 2': 'https://cdn.akamai.steamstatic.com/steam/apps/2357570/header.jpg',
   'path of exile': 'https://cdn.akamai.steamstatic.com/steam/apps/238960/header.jpg',
   'fifa / ea fc': 'https://cdn.akamai.steamstatic.com/steam/apps/2669320/header.jpg',
+  // Non-Steam titles — official site / publisher CDN artwork (og:image
+  // and public asset CDNs, all verified reachable)
+  'league of legends': 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Ahri_0.jpg',
+  'valorant': 'https://media.valorant-api.com/maps/7eaecc1b-4337-bbf6-6ab9-04b8f06b3319/splash.png',
+  'brawl stars': 'https://supercell.com/images/b524ca49e8549e5d3f5485452da7f26c/cropped.png',
+  'clash royale': 'https://supercell.com/images/8654bffbaa77efb91243d3706b739c25/og_clashroyale.d235f90b.jpg',
+  'minecraft': 'https://www.minecraft.net/content/dam/minecraftnet/franchise/logos/minecraft-creeper-face.jpg',
+  'mobile legends': 'https://akmweb.youngjoygame.com/web/gms/image/c3d1596795b86dc26e5f1ef2d48c3dfd.jpg',
+  'roblox': 'https://cms-media.roblox.com/assets/2e1081fe-ced6-8191-df28-c8bf4a2b1715.webp',
+  'standoff 2': 'https://web-static.cdn.boltgaming.io/store2/properties/images/OGImage/StoreOG.jpg',
+  'world of warcraft': 'https://blz-contentstack-images.akamaized.net/v3/assets/blt3452e3b114fab0cd/blt078aa5707fe32653/6757390465d1b1528eadc82d/wow-opengraph.png',
 }
 
 /**
