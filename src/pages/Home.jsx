@@ -201,7 +201,10 @@ export default function Home() {
           </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
-          {(games.length > 0 ? games : defaultGames).map((game, index) => (
+          {(games.length > 0
+            ? [...games].sort((a, b) => (gameArtUrl(b) ? 1 : 0) - (gameArtUrl(a) ? 1 : 0))
+            : defaultGames
+          ).map((game, index) => (
             <Link
               key={game.id || index}
               to={`/posts?gameId=${game.id}`}
