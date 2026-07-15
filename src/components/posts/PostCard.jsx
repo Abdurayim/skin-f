@@ -4,6 +4,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 import useSound from '../../hooks/useSound'
 import { formatPrice, formatDate } from '../../utils/formatters'
 import { getImageUrl } from '../../config/api'
+import GameIcon from '../games/GameIcon'
 
 export default function PostCard({ post }) {
   const { t } = useLanguage()
@@ -75,19 +76,7 @@ export default function PostCard({ post }) {
         </h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {post.game?.icon ? (
-              <img
-                src={post.game.icon}
-                alt={post.game.name}
-                className="w-5 h-5 rounded object-cover"
-              />
-            ) : (
-              <div className="w-5 h-5 rounded bg-surface-hover flex items-center justify-center">
-                <span className="text-xs font-bold text-text-secondary">
-                  {post.game?.name?.[0]}
-                </span>
-              </div>
-            )}
+            <GameIcon game={post.game} className="w-5 h-5 rounded" textClass="text-xs" />
             <span className="text-sm text-text-secondary truncate max-w-[100px]">
               {post.game?.name}
             </span>
