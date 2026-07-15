@@ -5,7 +5,8 @@ export const BACKEND_URL = API_BASE_URL.replace('/api', '')
 export const getImageUrl = (imagePath) => {
   if (!imagePath) return null
   if (imagePath.startsWith('http')) return imagePath
-  return `${BACKEND_URL}/${imagePath}`
+  // Stored paths may start with "/" — avoid double slashes, which the server 404s
+  return `${BACKEND_URL}/${String(imagePath).replace(/^\/+/, '')}`
 }
 
 export const ENDPOINTS = {
