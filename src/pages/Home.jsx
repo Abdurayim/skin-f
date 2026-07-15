@@ -9,6 +9,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import { useApi } from '../hooks/useApi'
 import useSound from '../hooks/useSound'
 import { ENDPOINTS } from '../config/api'
+import { gameArtUrl, gameArtPlaceholder } from '../utils/gameArt'
 
 export default function Home() {
   const { t } = useLanguage()
@@ -213,12 +214,13 @@ export default function Home() {
                 {/* Game image */}
                 <div className="aspect-[460/215] overflow-hidden bg-surface-hover">
                   <img
-                    src={game.image || game.icon || `https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg`}
+                    src={gameArtUrl(game) || gameArtPlaceholder(game.name)}
                     alt={game.name}
                     className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
                     loading="lazy"
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/460x215/1a1a1a/ff3366?text=' + encodeURIComponent(game.name)
+                      e.target.onerror = null
+                      e.target.src = gameArtPlaceholder(game.name)
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent group-hover:from-black/70" />

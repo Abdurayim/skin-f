@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useApi } from '../../hooks/useApi'
 import { useLanguage } from '../../hooks/useLanguage'
-import { ENDPOINTS, getImageUrl } from '../../config/api'
+import { ENDPOINTS } from '../../config/api'
 import Loader from '../common/Loader'
+import GameIcon from './GameIcon'
 
 export default function GameSelector({ value, onChange, error }) {
   const { t } = useLanguage()
@@ -76,19 +77,7 @@ export default function GameSelector({ value, onChange, error }) {
               `}
             >
               <div className="flex items-center gap-2">
-                {game.icon ? (
-                  <img
-                    src={getImageUrl(game.icon)}
-                    alt={game.name}
-                    className="w-8 h-8 rounded object-cover"
-                  />
-                ) : (
-                  <div className="w-8 h-8 rounded bg-surface-hover flex items-center justify-center">
-                    <span className="text-sm font-bold text-text-secondary">
-                      {game.name?.[0] || '?'}
-                    </span>
-                  </div>
-                )}
+                <GameIcon game={game} className="w-8 h-8 rounded" textClass="text-sm" />
                 <span className="text-sm font-medium text-text-primary truncate">
                   {game.name}
                 </span>

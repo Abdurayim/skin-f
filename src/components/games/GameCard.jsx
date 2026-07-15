@@ -1,3 +1,5 @@
+import GameIcon from './GameIcon'
+
 export default function GameCard({ game, selected, onClick }) {
   return (
     <button
@@ -12,19 +14,7 @@ export default function GameCard({ game, selected, onClick }) {
       `}
     >
       <div className="flex items-center gap-3">
-        {game.icon ? (
-          <img
-            src={getImageUrl(game.icon)}
-            alt={game.name}
-            className="w-12 h-12 rounded-lg object-cover"
-          />
-        ) : (
-          <div className="w-12 h-12 rounded-lg bg-surface-hover flex items-center justify-center">
-            <span className="text-xl font-bold text-text-secondary">
-              {game.name[0]}
-            </span>
-          </div>
-        )}
+        <GameIcon game={game} className="w-12 h-12 rounded-lg" textClass="text-xl" />
         <div>
           <h3 className="font-medium text-text-primary">{game.name}</h3>
           {game.postsCount !== undefined && (
