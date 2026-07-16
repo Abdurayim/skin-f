@@ -32,6 +32,8 @@ const KNOWN_GAME_ART = {
   'roblox': 'https://cms-media.roblox.com/assets/2e1081fe-ced6-8191-df28-c8bf4a2b1715.webp',
   'standoff 2': 'https://web-static.cdn.boltgaming.io/store2/properties/images/OGImage/StoreOG.jpg',
   'world of warcraft': 'https://blz-contentstack-images.akamaized.net/v3/assets/blt3452e3b114fab0cd/blt078aa5707fe32653/6757390465d1b1528eadc82d/wow-opengraph.png',
+  'fortnite': 'https://cdn2.unrealengine.com/en-fn-og-41-10-c1s9-egs-launcher-blade-2560x1440-2560x1440-d42b9403bb49.jpg',
+  'genshin impact': 'https://upload-static.hoyoverse.com/hk4e/upload/fb/common.jpg',
 }
 
 /**
